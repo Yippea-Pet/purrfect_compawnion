@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:purrfect_compawnion/pages/home.dart';
+import 'package:purrfect_compawnion/pages/login.dart';
+import 'package:purrfect_compawnion/pages/pethouse.dart';
 
-void main() => runApp(MaterialApp(
-  home: Home(),
-));
-//pearl was once here thrice
-//yixin was also once here
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+
+    routes: {
+      '/': (context) => Login(),
+      '/home': (context) => Home(),
+      '/pethouse': (context) => PetHouse(),
+    },
+  ));
 }

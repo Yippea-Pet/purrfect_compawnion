@@ -6,7 +6,7 @@ import 'package:purrfect_compawnion/pages/pethouse.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/',
+    initialRoute: '/pethouse',
 
     routes: {
       '/': (context) => Login(),

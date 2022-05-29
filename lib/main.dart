@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:purrfect_compawnion/pages/home.dart';
-import 'package:purrfect_compawnion/pages/login.dart';
-import 'package:purrfect_compawnion/pages/pethouse.dart';
+import 'package:purrfect_compawnion/pages/authenticate/login.dart';
+import 'package:purrfect_compawnion/pages/features/home.dart';
+import 'package:purrfect_compawnion/pages/features/pethouse.dart';
 
 
 void main() {

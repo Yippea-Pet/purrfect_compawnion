@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "950052824421",
+    "project_id": "purrfectcompawnion-b4e0d",
+    "storage_bucket": "purrfectcompawnion-b4e0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950052824421:android:e816d1115510069b7aad8c",
+        "android_client_info": {
+          "package_name": "com.yippeapet.purrfect_compawnion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950052824421-3c4tl58c2l68nfca3047n8agqnkh3vll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKp16OffhnkeeZdEMdL9tOaPlTAoqSFAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950052824421-3c4tl58c2l68nfca3047n8agqnkh3vll.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

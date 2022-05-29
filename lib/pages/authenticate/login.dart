@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:purrfect_compawnion/services/auth.dart';
+
+import '../../shared/constants.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  final toggleView;
+
+  const Login({Key? key, this.toggleView}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
+
+  String email = '';
+  String password = '';
+  String error = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber[50],
+      appBar: AppBar(
+        backgroundColor: Colors.orange[200],
+        elevation: 0.0,
+          title: Text('Sign In'),
+        actions: <Widget>[
+          TextButton.icon(
+            icon: Icon(Icons.person),
+            label: Text('Register'),
+            onPressed: () {
+              widget.toggleView();
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -19,31 +47,75 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-                flex: 2,
+                flex: 1,
                 child: Image.asset('assets/Logo.PNG')
             ),
+            // Expanded(
+            //   flex: 3,
+            //   child: Image.asset('assets/MovingSoccat.GIF'),
+            // ),
             Expanded(
               flex: 3,
-              child: Image.asset('assets/MovingSoccat.GIF'),
-            ),
-            Expanded(
-                flex: 1,
-                child: Center(
-                  child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.pink[50],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                children: <Widget>[
+                  // Form to fill in email
+                  TextFormField(
+                    decoration: textInputDecoration.copyWith(hintText: 'Email'),
+                    validator: (val) => val!.isEmpty ? "Enter an email" : null,
+                    onChanged: (value) {
+                      setState(() => (email = value));
+                    },
+                  ),
+                  SizedBox(height: 5.0,),
+                  // Form to fill in password
+                  TextFormField(
+                    decoration: textInputDecoration.copyWith(hintText: 'Password'),
+                    obscureText: true,
+                    validator: (val) => val!.length < 6 ? "Enter a password with at least 6 characters" : null,
+                    onChanged: (value) {
+                      setState(() => (password = value));
+                    },
+                  ),
+                  SizedBox(height: 10.0,),
+                  // Sign in button
+                  ElevatedButton(
+                    // onPressed function needs to be async because it will
+                    // interact with firebase
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.pink),
                       ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() => loading = true);
+                          dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                          if (result == null) {
+                            setState(() {
+                              error = 'Error signing in!';
+                              loading = false;
+                            });
+                          }
+                        }
+                      },
                       child: Text(
-                        'Login',
+                        'Sign In',
                         style: TextStyle(
-                          backgroundColor: Colors.pink[50],
-                          color: Colors.pink[400],
-                          fontSize: 50.0,
+                          color: Colors.white,
                         ),
                       )),
-                ),
+                  Text(
+                    error,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
             ),
+              ),
+            )
           ],
         ),
       ),

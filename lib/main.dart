@@ -5,6 +5,7 @@ import 'package:purrfect_compawnion/pages/authenticate/login.dart';
 import 'package:purrfect_compawnion/pages/authenticate/register.dart';
 import 'package:purrfect_compawnion/pages/features/home.dart';
 import 'package:purrfect_compawnion/pages/features/pethouse.dart';
+import 'package:purrfect_compawnion/pages/features/welcome.dart';
 import 'package:purrfect_compawnion/pages/wrapper.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
 
@@ -26,8 +27,10 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: AuthService().user,
       child: MaterialApp(
+        initialRoute: '/welcome',
       routes: {
         '/': (context) => Wrapper(),
+        '/welcome': (context) => Welcome(),
         '/login': (context) => Login(),
         '/register': (context) => Register(),
         '/home': (context) => Home(),

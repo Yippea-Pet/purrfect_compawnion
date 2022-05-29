@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class PetHouse extends StatefulWidget {
@@ -10,6 +8,7 @@ class PetHouse extends StatefulWidget {
 }
 
 class _PetHouseState extends State<PetHouse> {
+  int friendshipLevel = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +29,7 @@ class _PetHouseState extends State<PetHouse> {
                 margin: EdgeInsets.symmetric(vertical: 5.0),
                 child: Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: Text('Friendship Level: 0'),
+                  child: Text('Friendship Level: ${friendshipLevel}'),
                 ),
               ),
             ),
@@ -39,8 +38,9 @@ class _PetHouseState extends State<PetHouse> {
         ),
 
         floatingActionButton: FloatingActionButton(
-        onPressed: ()
-    {},
+        onPressed: () {
+          setState(() => friendshipLevel += 1);
+        },
     child: Icon(Icons.coffee),
     )
     ,

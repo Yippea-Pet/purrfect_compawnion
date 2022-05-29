@@ -76,6 +76,9 @@ flutter:
    - family: Patua_One
      fonts:
        - asset: fonts/PatuaOne-Regular.ttf
+   - family: StyleScript
+     fonts:
+       - asset: fonts/StyleScript-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

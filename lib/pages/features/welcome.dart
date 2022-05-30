@@ -27,61 +27,63 @@ class _WelcomeState extends State<Welcome> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(0),
                       ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 27, top: 14),
-                                child: Container(
-                                    width: 79,
-                                    height: 46,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 0, left: 0),
-                                              child: Container(
-                                                  width: 79,
-                                                  height: 46,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            24),
-                                                  ),
-                                                  child: Stack(
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.topLeft,
-                                                        child: const Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 0,
-                                                                  top: 1),
+                      child: SingleChildScrollView(
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 27, top: 14),
+                                  child: Container(
+                                      width: 79,
+                                      height: 46,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0, left: 0),
+                                                child: Container(
+                                                    width: 79,
+                                                    height: 46,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              24),
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: const Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 0,
+                                                                    top: 1),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ))),
-                                        ),
-                                      ],
-                                    ))),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 286, top: 19),
+                                                      ],
+                                                    ))),
+                                          ),
+                                        ],
+                                      ))),
                             ),
-                          ),
-                        ],
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 286, top: 19),
+                              ),
+                            ),
+                          ],
+                        ),
                       ))),
             ),
             Align(

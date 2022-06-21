@@ -1,6 +1,6 @@
 class Pet {
-  int? friendshipLevel;
-  int? hungerLevel;
-  int? hygieneLevel;
-  Pet({this.hygieneLevel, this.friendshipLevel, this.hungerLevel});
+  int friendshipLevel;
+  int hungerLevel;
+  int hygieneLevel;
+  Pet({ required this.hygieneLevel, required this.friendshipLevel, required this.hungerLevel });
 }

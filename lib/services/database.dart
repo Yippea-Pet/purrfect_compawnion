@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:purrfect_compawnion/models/myuser.dart';
 
 class DatabaseService {
   final String? uid;
@@ -13,5 +14,16 @@ class DatabaseService {
       'hygieneLevel' : hygieneLevel,
       'hungerLevel' : hungerLevel,
     });
+  }
+
+  MyUser _userFromSnapshot(DocumentSnapshot snapshot) {
+    return MyUser(
+      uid: uid,
+      pet: snapshot['pet'],
+    );
+  }
+
+  Stream<MyUser> get myUser {
+    return petCollection.doc(uid).snapshots().map(_userFromSnapshot);
   }
 }

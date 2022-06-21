@@ -47,7 +47,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/Logo.PNG'),
+              Image.asset('assets/Logo.png'),
               Form(
                 key: _formKey,
                 child: Column(

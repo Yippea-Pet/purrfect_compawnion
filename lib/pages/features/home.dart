@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Expanded(
                 flex: 2,
-                child: Image.asset('assets/Logo.PNG')
+                child: Image.asset('assets/Logo.png')
             ),
             Expanded(
               flex: 4,

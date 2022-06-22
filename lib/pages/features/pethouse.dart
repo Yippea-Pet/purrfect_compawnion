@@ -15,25 +15,49 @@ class PetHouse extends StatefulWidget {
 }
 
 class _PetHouseState extends State<PetHouse> {
-  int hungerLevel = 0;
-  int friendshipLevel = 0;
-  int hygieneLevel = 0;
+  int? hungerLevel;
+  int? friendshipLevel;
+  int? hygieneLevel;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     // final docUser = FirebaseFirestore.instance.collection("pets");
     final user = Provider.of<MyUser>(context);
+    // var db = FirebaseFirestore.instance;
+    // var pet = db.collection("pets").doc(user.uid);
+    // pet.get().then(
+    //     (DocumentSnapshot doc) async {
+    //       final data = doc.data() as Map<String, dynamic>;
+    //       hungerLevel = data['hungerLevel'];
+    //       friendshipLevel = data['friendshipLevel'];
+    //       hygieneLevel = data['hygieneLevel'];
+    //     }
+    // );
+    void readData() async {
+      try {
+        var db = FirebaseFirestore.instance;
+        var pet = db.collection("pets").doc(user.uid);
+        pet.get().then(
+                (DocumentSnapshot doc) async {
+              final data = doc.data() as Map<String, dynamic>;
+              hungerLevel = data['hungerLevel'];
+              friendshipLevel = data['friendshipLevel'];
+              hygieneLevel = data['hygieneLevel'];
+            }
+        );
+      } catch (e) {
+        print(e);
+      }
+    }
 
-    return StreamBuilder<MyUser>(
-        stream: DatabaseService(uid: user.uid).myUser,
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            MyUser myUser = snapshot.data!;
-            Pet? currentPet = myUser.pet;
-            hungerLevel = currentPet!.hungerLevel;
-            friendshipLevel = currentPet.friendshipLevel;
-            hygieneLevel = currentPet.hygieneLevel;
-            return Scaffold(
+    return Scaffold(
               appBar: AppBar(
                 title: Text('Soccat!'),
                 backgroundColor: Colors.red[200],
@@ -77,6 +101,7 @@ class _PetHouseState extends State<PetHouse> {
                         ElevatedButton(
                           onPressed: () async {
                             setState(() => hungerLevel += 1);
+                            db.collection("pets").doc(user.uid).update({ "hungerLevel" : 100});
                             await DatabaseService(uid: user.uid).updateUserData(friendshipLevel, hygieneLevel, hungerLevel);
                           },
                           child: Icon(Icons.food_bank),
@@ -142,10 +167,10 @@ class _PetHouseState extends State<PetHouse> {
                 ),
               ),
             );
-          }
+          // }
           // else {
           //   return Loading();
           // }
-        });
+        // });
   }
 }

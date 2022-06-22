@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:purrfect_compawnion/models/myuser.dart';
+import 'package:purrfect_compawnion/models/pet.dart';
 
 class DatabaseService {
   final String? uid;

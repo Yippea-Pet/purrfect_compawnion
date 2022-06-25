@@ -54,6 +54,12 @@ class _LoginState extends State<Login> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                  ),
+                  ]
                 ),
                 child: Form(
                   key: _formKey,
@@ -101,7 +107,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       SizedBox(
-                        height: 20.0,
+                        height: 50.0,
                       ),
                       // Sign in button
                       SizedBox(
@@ -133,7 +139,7 @@ class _LoginState extends State<Login> {
                               }
                             },
                             child: Text(
-                              'Sign In',
+                              'Login',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 color: Colors.white,

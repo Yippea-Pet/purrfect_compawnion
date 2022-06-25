@@ -109,7 +109,7 @@ class _RegisterState extends State<Register> {
                                     borderRadius: BorderRadius.circular(30.0),
                                   )),
                                   backgroundColor:
-                                      MaterialStateProperty.all(Colors.pink),
+                                      MaterialStateProperty.all(Colors.pink[400]),
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {

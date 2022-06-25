@@ -111,7 +111,7 @@ class _LoginState extends State<Login> {
                                     borderRadius: BorderRadius.circular(30.0),
                                   )),
                                   backgroundColor:
-                                      MaterialStateProperty.all(Colors.pink),
+                                      MaterialStateProperty.all(Colors.pink[400]),
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
@@ -134,9 +134,7 @@ class _LoginState extends State<Login> {
                                   ),
                                 )),
                           ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
+                          SizedBox(height: 10.0,),
                           Text(
                             error,
                             style: TextStyle(

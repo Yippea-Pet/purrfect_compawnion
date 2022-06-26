@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/models/pet.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 
 import '../../models/myuser.dart';
 
@@ -17,7 +20,9 @@ class PetHouse extends StatefulWidget {
 class _PetHouseState extends State<PetHouse> {
   int hungerLevel = 0;
   int friendshipLevel = 0;
-  int hygieneLevel = 0;
+  bool showPetMaxLevelDialog = false;
+  bool isChecked = false;
+
   Future<Map<String, dynamic>>? petData;
   int petState = 0; // 0(default):sleeping, 1: eating, 2/3 to be added
 /*
@@ -49,7 +54,6 @@ class _PetHouseState extends State<PetHouse> {
       dynamic data = doc.data() as Map<String, dynamic>;
       hungerLevel = data['hungerLevel'];
       friendshipLevel = data['friendshipLevel'];
-      hygieneLevel = data['hygieneLevel'];
     });
     return Scaffold(
       appBar: AppBar(
@@ -90,13 +94,6 @@ class _PetHouseState extends State<PetHouse> {
                     child: Text('Hunger Level: ${hungerLevel}'),
                   ),
                 ),
-                Card(
-                  margin: EdgeInsets.symmetric(vertical: 5.0),
-                  child: Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text('Hygiene Level: ${hygieneLevel}'),
-                  ),
-                ),
               ],
             ),
             Expanded(
@@ -116,8 +113,8 @@ class _PetHouseState extends State<PetHouse> {
                       hungerLevel += 1;
                       petState = 1;
                     });
-                    await DatabaseService(uid: user.uid).updateUserData(
-                        friendshipLevel, hygieneLevel, hungerLevel);
+                    await DatabaseService(uid: user.uid)
+                        .updatePetData(friendshipLevel, hungerLevel);
                   },
                   child: Icon(Icons.food_bank),
                   style: ButtonStyle(
@@ -136,11 +133,36 @@ class _PetHouseState extends State<PetHouse> {
                 ElevatedButton(
                   onPressed: () async {
                     setState(() {
-                      friendshipLevel += 1;
+                      friendshipLevel = min(friendshipLevel + 1, 100);
                       petState = 2;
                     });
-                    await DatabaseService(uid: user.uid).updateUserData(
-                        friendshipLevel, hygieneLevel, hungerLevel);
+                    await DatabaseService(uid: user.uid)
+                        .updatePetData(friendshipLevel, hungerLevel);
+                    if (friendshipLevel >= 100 && !showPetMaxLevelDialog) {
+                      return showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Warning!"),
+                                content: const Text(
+                                    "You have reached Friendship level 100!"),
+                                actions: <Widget>[
+                                  Checkbox(
+                                      checkColor: Colors.white,
+                                      fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
+                                      value: isChecked,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          isChecked = value ?? false;
+                                        });
+                                      }),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'OK'),
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              ));
+                    }
                   },
                   child: Icon(Icons.videogame_asset),
                   style: ButtonStyle(
@@ -159,11 +181,11 @@ class _PetHouseState extends State<PetHouse> {
                 ElevatedButton(
                   onPressed: () async {
                     setState(() {
-                      hygieneLevel += 1;
+                      // hygieneLevel += 1;
                       petState = 3;
                     });
-                    await DatabaseService(uid: user.uid).updateUserData(
-                        friendshipLevel, hygieneLevel, hungerLevel);
+                    await DatabaseService(uid: user.uid)
+                        .updatePetData(friendshipLevel, hungerLevel);
                   },
                   child: Icon(Icons.cleaning_services),
                   style: ButtonStyle(

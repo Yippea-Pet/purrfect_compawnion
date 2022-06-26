@@ -7,12 +7,11 @@ class DatabaseService {
   DatabaseService({ this.uid });
   // collection reference
   final CollectionReference petCollection = FirebaseFirestore.instance.collection('pets');
+  final CollectionReference foodCollection = FirebaseFirestore.instance.collection('food');
 
-  Future updateUserData(int friendshipLevel, int hygieneLevel, int hungerLevel) async {
-    print(friendshipLevel);
+  Future updatePetData(int friendshipLevel, int hungerLevel) async {
     return await petCollection.doc(uid).set({
       'friendshipLevel' : friendshipLevel,
-      'hygieneLevel' : hygieneLevel,
       'hungerLevel' : hungerLevel,
     });
   }

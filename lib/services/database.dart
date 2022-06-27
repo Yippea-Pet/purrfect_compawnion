@@ -15,11 +15,11 @@ class DatabaseService {
     });
   }
 
-  Future updateFoodData(int friendshipLevel, int hungerLevel, String foodType, int foodQuantity) async {
+  Future updateFoodData(int friendshipLevel, int hungerLevel, int foodQuantity) async {
     return await petCollection.doc(uid).set({
       'friendshipLevel' : friendshipLevel,
       'hungerLevel' : hungerLevel,
-      '${foodType}' : foodQuantity,
+      'food' : foodQuantity,
     });
   }
 

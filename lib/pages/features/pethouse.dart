@@ -140,7 +140,7 @@ class _PetHouseState extends State<PetHouse> {
                               hungerLevel += 1;
                               petState = 1;
                             });
-                            await DatabaseService(uid: user.uid).updateFoodData(friendshipLevel, hungerLevel, "food", foodQuantity);
+                            await DatabaseService(uid: user.uid).updateFoodData(friendshipLevel, hungerLevel, foodQuantity);
                             print(foodQuantity);
                           } else {
                             return showDialog(

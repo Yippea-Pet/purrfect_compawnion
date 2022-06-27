@@ -19,7 +19,7 @@ class DatabaseService {
     return await petCollection.doc(uid).set({
       'friendshipLevel' : friendshipLevel,
       'hungerLevel' : hungerLevel,
-      foodType : foodQuantity,
+      '${foodType}' : foodQuantity,
     });
   }
 

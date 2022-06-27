@@ -14,16 +14,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber[50],
+      backgroundColor: Colors.pink[50],
       appBar: AppBar(
-        backgroundColor: Colors.orange[200],
+        backgroundColor: Colors.red[200],
         actions: <Widget>[
           TextButton.icon(
             onPressed: () async {
               await _auth.signOut();
             },
-            icon: Icon(Icons.person),
-            label: Text('Logout'),
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            label: Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           )
         ],
       ),
@@ -48,15 +56,19 @@ class _HomeState extends State<Home> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/pethouse');
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.pink[50],
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          )),
+                      backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
                     ),
                     child: Text(
                       'Pet House',
                       style: TextStyle(
-                        backgroundColor: Colors.pink[50],
+                        // backgroundColor: Colors.pink[100],
                         color: Colors.pink[400],
-                        fontSize: 50.0,
+                        fontSize: 40.0,
                       ),
                     )),
               ),

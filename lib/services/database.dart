@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:purrfect_compawnion/models/myuser.dart';
-import 'package:purrfect_compawnion/models/pet.dart';
 
 class DatabaseService {
   final String? uid;
@@ -13,6 +12,14 @@ class DatabaseService {
     return await petCollection.doc(uid).set({
       'friendshipLevel' : friendshipLevel,
       'hungerLevel' : hungerLevel,
+    });
+  }
+
+  Future updateFoodData(int friendshipLevel, int hungerLevel, String foodType, int foodQuantity) async {
+    return await petCollection.doc(uid).set({
+      'friendshipLevel' : friendshipLevel,
+      'hungerLevel' : hungerLevel,
+      foodType : foodQuantity,
     });
   }
 

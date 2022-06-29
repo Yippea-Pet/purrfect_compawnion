@@ -42,6 +42,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
       await DatabaseService(uid: user!.uid).updateFoodData(0, 100, 10);
+      await DatabaseService(uid: user.uid).updatePetName("Soccat!");
       return _userFromFirebaseUser(user);
   }
 

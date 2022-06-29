@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:purrfect_compawnion/pages/features/edit_name.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
@@ -21,50 +22,62 @@ class _PetHouseState extends State<PetHouse> {
   int hungerLevel = 0;
   int friendshipLevel = 0;
   int foodQuantity = 0;
+  String? name;
   bool showPetMaxLevelDialog = false;
   bool isChecked = false;
   bool loading = false;
 
   Future<Map<String, dynamic>>? petData;
   int petState = 0; // 0(default):sleeping, 1: eating, 2/3 to be added
-/*
-  @override
-  void initState() {
-    Future petData = readData();
-    super.initState();
-  }
 
-  Future readData() async {
-    final user = Provider.of<MyUser>(context);
-    Map<String, dynamic> data;
-    var db = FirebaseFirestore.instance;
-    var pet = db.collection("pets").doc(user.uid);
-    pet.get().then((DocumentSnapshot doc) async {
-      data = doc.data() as Map<String, dynamic>;
-      hungerLevel = data['hungerLevel'];
-      friendshipLevel = data['friendshipLevel'];
-      hygieneLevel = data['hygieneLevel'];
-    });
-  }
-*/
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
     var db = FirebaseFirestore.instance;
-    var pet = db.collection("pets").doc(user.uid);
-    pet.get().then((DocumentSnapshot doc) async {
+
+    var petLevel = db.collection("users").doc(user.uid).collection("pet").doc("levels");
+    petLevel.get().then((DocumentSnapshot doc) async {
       dynamic data = doc.data() as Map<String, dynamic>;
       hungerLevel = data['hungerLevel'];
       friendshipLevel = data['friendshipLevel'];
-      foodQuantity = data['food'];
+    });
+
+    var foodData = db.collection("users").doc(user.uid).collection("pet").doc("food");
+    foodData.get().then((DocumentSnapshot doc) async {
+      dynamic data = doc.data() as Map<String, dynamic>;
+      foodQuantity = data['foodQuantity'];
+    });
+
+    var petName = db.collection("users").doc(user.uid).collection("pet").doc("name");
+    petName.get().then((DocumentSnapshot doc) async {
+      dynamic data = doc.data() as Map<String, dynamic>;
+      name = data['name'];
+      setState(() {});
     });
 
     return loading
         ? Loading()
         : Scaffold(
             appBar: AppBar(
-              title: Text('Soccat!'),
+              title: Center(
+                child: Text(name ?? 'Soccat!'),
+              ),
               backgroundColor: Colors.red[200],
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return editName();
+                        });
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                )
+              ],
             ),
             body: Container(
               decoration: BoxDecoration(
@@ -95,7 +108,8 @@ class _PetHouseState extends State<PetHouse> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Card(elevation: 3.0,
+                      Card(
+                        elevation: 3.0,
                         margin: EdgeInsets.symmetric(vertical: 5.0),
                         child: Padding(
                           padding: EdgeInsets.all(10.0),
@@ -109,7 +123,7 @@ class _PetHouseState extends State<PetHouse> {
                         child: Row(
                           children: <Widget>[
                             Image.asset(
-                                'assets/FishIconThickerLineart.PNG',
+                              'assets/FishIconThickerLineart.PNG',
                               width: 40,
                               height: 40,
                             ),
@@ -117,7 +131,6 @@ class _PetHouseState extends State<PetHouse> {
                           ],
                         ),
                       )
-
                     ],
                   ),
                   Expanded(
@@ -140,17 +153,20 @@ class _PetHouseState extends State<PetHouse> {
                               hungerLevel += 1;
                               petState = 1;
                             });
-                            await DatabaseService(uid: user.uid).updateFoodData(friendshipLevel, hungerLevel, foodQuantity);
+                            await DatabaseService(uid: user.uid).updateFoodData(
+                                friendshipLevel, hungerLevel, foodQuantity);
                             print(foodQuantity);
                           } else {
                             return showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
                                       title: const Text("Warning!"),
-                                      content: const Text("You have 0 food left, complete more task to get more food!"),
+                                      content: const Text(
+                                          "You have 0 food left, complete more task to get more food!"),
                                       actions: <Widget>[
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context, 'OK'),
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
                                           child: const Text("OK"),
                                         ),
                                       ],
@@ -160,9 +176,13 @@ class _PetHouseState extends State<PetHouse> {
                         child: Icon(Icons.food_bank),
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(CircleBorder()),
-                          padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                          backgroundColor: MaterialStateProperty.all(Colors.pink[300]), // <-- Button color
-                          overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(20)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Colors.pink[300]), // <-- Button color
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.pink; // <-- Splash color
                           }),
@@ -175,8 +195,10 @@ class _PetHouseState extends State<PetHouse> {
                             friendshipLevel = min(friendshipLevel + 1, 100);
                             petState = 2;
                           });
-                          await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel);
-                          if (friendshipLevel >= 100 && !showPetMaxLevelDialog) {
+                          await DatabaseService(uid: user.uid)
+                              .updatePetData(friendshipLevel, hungerLevel);
+                          if (friendshipLevel >= 100 &&
+                              !showPetMaxLevelDialog) {
                             return showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>
@@ -190,15 +212,19 @@ class _PetHouseState extends State<PetHouse> {
                                           Text("Do not show this again"),
                                           Checkbox(
                                               checkColor: Colors.white,
-                                              fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
+                                              fillColor: MaterialStateProperty
+                                                  .resolveWith(
+                                                      checkBoxMaterialState),
                                               value: showPetMaxLevelDialog,
                                               onChanged: (bool? value) {
                                                 setState(() {
-                                                  showPetMaxLevelDialog = value ?? false;
+                                                  showPetMaxLevelDialog =
+                                                      value ?? false;
                                                 });
                                               }),
                                           TextButton(
-                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'OK'),
                                             child: const Text("OK"),
                                           ),
                                         ],
@@ -209,37 +235,18 @@ class _PetHouseState extends State<PetHouse> {
                         child: Icon(Icons.videogame_asset),
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(CircleBorder()),
-                          padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                          backgroundColor: MaterialStateProperty.all(Colors.pink[300]), // <-- Button color
-                          overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(20)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Colors.pink[300]), // <-- Button color
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (states) {
                             if (states.contains(MaterialState.pressed))
                               return Colors.pink; // <-- Splash color
                           }),
                         ),
                       ),
-                      // SizedBox(width: 30),
-                      // ElevatedButton(
-                      //   onPressed: () async {
-                      //     setState(() {
-                      //       // hygieneLevel += 1;
-                      //       petState = 3;
-                      //     });
-                      //     await DatabaseService(uid: user.uid)
-                      //         .updatePetData(friendshipLevel, hungerLevel);
-                      //   },
-                      //   child: Icon(Icons.cleaning_services),
-                      //   style: ButtonStyle(
-                      //     shape: MaterialStateProperty.all(CircleBorder()),
-                      //     padding: MaterialStateProperty.all(EdgeInsets.all(20)),
-                      //     backgroundColor: MaterialStateProperty.all(
-                      //         Colors.pink[300]), // <-- Button color
-                      //     overlayColor:
-                      //         MaterialStateProperty.resolveWith<Color?>((states) {
-                      //       if (states.contains(MaterialState.pressed))
-                      //         return Colors.pink; // <-- Splash color
-                      //     }),
-                      //   ),
-                      // ),
                     ],
                   ),
                   SizedBox(height: 30),

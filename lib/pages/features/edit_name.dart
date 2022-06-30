@@ -30,29 +30,6 @@ class _editNameState extends State<editName> {
       name = data['name'];
     });
 
-    // return Form(
-    //     key: _formKey,
-    //     child: Column(
-    //   children: <Widget>[
-    //     Text("How would you like to call me? owo"),
-    //     TextFormField(
-    //       initialValue: name,
-    //       decoration: textInputDecoration,
-    //       validator: (val) => val!.isEmpty ? 'Please enter a name!' : null,
-    //       onChanged: (val) => setState(() => _currentName = val),
-    //     ),
-    //     TextButton(
-    //         onPressed: () async {
-    //           if (_formKey.currentState!.validate()) {
-    //             await DatabaseService(uid: user.uid).updatePetName(_currentName ?? name);
-    //             Navigator.pop(context);
-    //           }
-    //         },
-    //         child: Text("OK"),
-    //     ),
-    //   ],
-    // ));
-
     return AlertDialog(
       title: Text("You wanna rename me?"),
       content: Form(

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/pages/features/edit_name.dart';
+import 'package:purrfect_compawnion/pages/features/user_guide.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
@@ -76,7 +77,17 @@ class _PetHouseState extends State<PetHouse> {
                     Icons.edit,
                     color: Colors.white,
                   ),
-                )
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return userGuide();
+                        });
+                  },
+                    icon: Icon(Icons.question_mark_rounded),
+                ),
               ],
             ),
             body: Container(

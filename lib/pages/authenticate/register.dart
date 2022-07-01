@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
 
 import '../../shared/constants.dart';
+import '../../shared/loading.dart';
 
 class Register extends StatefulWidget {
   final toggleView;
@@ -16,6 +18,7 @@ class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool obscurePassword = true;
 
   String email = '';
   String password = '';

@@ -41,8 +41,7 @@ class _RegisterState extends State<Register> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
+
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +111,6 @@ class _RegisterState extends State<Register> {
               ],
             ),
           ),
-        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
+import 'package:purrfect_compawnion/services/get_weather.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -70,9 +71,17 @@ class _HomeState extends State<Home> {
                         color: Colors.pink[400],
                         fontSize: 40.0,
                       ),
-                    )),
+                    )
+                ),
               ),
             ),
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       Weather weather = new Weather(location: 'Singapore', url: '??');
+            //       await weather.getWeather();
+            //     },
+            //     child: Text("TEST")
+            // ),
           ],
         ),
       ),

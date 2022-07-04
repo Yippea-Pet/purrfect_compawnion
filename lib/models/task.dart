@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 class Task {
   int? id;
   String? title;
@@ -51,5 +55,14 @@ class Task {
     return data;
   }
 
-
+  Widget buildTaskList(QuerySnapshot snapshot) {
+    return ListView.builder(
+        itemCount: snapshot.docs.length,
+        itemBuilder: (context, index) {
+          final doc = snapshot.docs[index];
+          return ListTile(
+            title: Text(doc["title"]),
+          );
+        });
+  }
 }

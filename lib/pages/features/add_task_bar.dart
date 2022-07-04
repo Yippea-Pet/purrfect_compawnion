@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/controllers/task_controller.dart';
 import 'package:purrfect_compawnion/pages/ui/widgets/button.dart';
 import 'package:purrfect_compawnion/pages/ui/widgets/input_field.dart';
 import 'package:intl/intl.dart';
+import 'package:purrfect_compawnion/services/database.dart';
 
+import '../../models/myuser.dart';
 import '../../models/task.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -40,6 +43,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser>(context);
+
+
     return Scaffold(
       appBar: _appBar(context),
       body: Container(
@@ -59,8 +65,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               MyInputField(title: "Title", hint: "Enter your title", controller: _titleController,),
               MyInputField(title: "Note", hint: "Enter your note", controller: _noteController,),
-              MyInputField(
-                  title: "Date", hint: DateFormat.yMd().format(_selectedDate),
+              MyInputField(title: "Date", hint: DateFormat.yMd().format(_selectedDate),
                 widget: IconButton(
                   icon: Icon(Icons.calendar_today_outlined,
                     color: Colors.grey),
@@ -163,7 +168,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(width: 20,),
-                    MyButton(label: "Create Task", onTap: () => _validateDate())
+                    MyButton(label: "Create Task", onTap: () => _validateDate(user))
                   ],
                 )
             ],
@@ -173,9 +178,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  _validateDate() {
+  _validateDate(user) {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDb();
+      _addTaskToDb(user);
       Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar("Required", "All fields are required !",
@@ -186,9 +191,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  _addTaskToDb() async {
-    int value =await _taskController.addTask(
-        task: Task(
+  _addTaskToDb(user) async {
+    DatabaseService(uid: user.uid).addTask(
+        new Task(
           note: _noteController.text,
           title: _titleController.text,
           date: DateFormat.yMd().format(_selectedDate),
@@ -196,10 +201,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
           endTime: _endTime,
           remind: _selectedRemind,
           repeat: _selectedRepeat,
+          color: 5,
           isCompleted: 0,
         )
     );
-    print("My id is "+"$value");
+
+    // int value = await _taskController.addTask(
+    //     task: Task(
+    //       note: _noteController.text,
+    //       title: _titleController.text,
+    //       date: DateFormat.yMd().format(_selectedDate),
+    //       startTime: _startTime,
+    //       endTime: _endTime,
+    //       remind: _selectedRemind,
+    //       repeat: _selectedRepeat,
+    //       color: 5,
+    //       isCompleted: 0,
+    //     )
+    // );
+    // print("My id is "+"$value");
   }
 
   _appBar(BuildContext context) {

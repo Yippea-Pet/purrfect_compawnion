@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/task.dart';
+
 class DatabaseService {
   final String? uid;
   DatabaseService({ this.uid });
@@ -28,5 +30,30 @@ class DatabaseService {
     return await users.doc(uid).collection("pet").doc("name").set({
       'name' : name,
     });
+  }
+
+  Future updateDeductHungerTime(DateTime time) async {
+    return await users.doc(uid).collection("pet").doc("time").set({
+      'time': time,
+    });
+  }
+
+  Future addTask(Task? task) async {
+    return await users.doc(uid).collection("tasks").add({
+      "id": task?.id,
+      "title": task?.title,
+      "note": task?.note,
+      "isCompleted": task?.isCompleted,
+      "date": task?.date,
+      "startTime": task?.startTime,
+      "endTime": task?.endTime,
+      "color": task?.color,
+      "remind": task?.remind,
+      "repeat": task?.repeat,
+    });
+  }
+
+  Future deleteTask(String? id) async {
+    return await users.doc(uid).collection("tasks").doc(id).delete();
   }
 }

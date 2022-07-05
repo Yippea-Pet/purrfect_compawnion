@@ -4,14 +4,17 @@ import '../models/task.dart';
 
 class TaskController extends GetxController{
 
+  // final user = Provider.of<MyUser>(context);
+
   @override
-  void onRead() {
+  void onReady() {
     super.onReady();
   }
 
   var taskList = <Task>[].obs;
 
   Future<int> addTask({Task? task}) async {
+    // return await DatabaseService(user: user.uid).addTask(task);
     return await DBHelper.insert(task);
   }
 

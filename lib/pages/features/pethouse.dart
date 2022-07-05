@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,6 @@ import 'package:purrfect_compawnion/services/database.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
-
 import '../../models/myuser.dart';
 
 class PetHouse extends StatefulWidget {
@@ -19,6 +19,8 @@ class PetHouse extends StatefulWidget {
   State<PetHouse> createState() => _PetHouseState();
 }
 
+
+
 class _PetHouseState extends State<PetHouse> {
   int hungerLevel = 0;
   int friendshipLevel = 0;
@@ -27,14 +29,21 @@ class _PetHouseState extends State<PetHouse> {
   bool showPetMaxLevelDialog = false;
   bool isChecked = false;
   bool loading = false;
+  var db;
+  late DateTime lastDeductTime;
 
-  Future<Map<String, dynamic>>? petData;
-  int petState = 0; // 0(default):sleeping, 1: eating, 2/3 to be added
+  int petState = 0; // 0(default):sleeping, 1: eating, 2: playing
+
+  @override
+  initState() {
+    super.initState();
+    scheduleTimeout(1);
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
-    var db = FirebaseFirestore.instance;
+    db = FirebaseFirestore.instance;
 
     var petLevel = db.collection("users").doc(user.uid).collection("pet").doc("levels");
     petLevel.get().then((DocumentSnapshot doc) async {
@@ -55,6 +64,13 @@ class _PetHouseState extends State<PetHouse> {
       name = data['name'];
       setState(() {});
     });
+
+    // var timeDoc = db.collection("users").doc(user.uid).collection("pet").doc("time");
+    // timeDoc.get().then((DocumentSnapshot doc) async {
+    //   dynamic data = doc.data() as Map<String, dynamic>;
+    //   lastDeductTime = data['time'].toDate();
+    //   setState(() {});
+    // });
 
     return loading
         ? Loading()
@@ -141,7 +157,7 @@ class _PetHouseState extends State<PetHouse> {
                             Text(" : ${foodQuantity}"),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Expanded(
@@ -266,4 +282,40 @@ class _PetHouseState extends State<PetHouse> {
             ),
           );
   }
+
+  void updateTime() async {
+    final user = Provider.of<MyUser>(context, listen: false);
+    var timeDoc = db.collection("users").doc(user.uid).collection("pet").doc("time");
+    await timeDoc.get().then((DocumentSnapshot doc) async {
+      dynamic data = doc.data() as Map<String, dynamic>;
+      lastDeductTime = data['time'].toDate();
+    });
+    // final difference = lastDeductTime.difference(DateTime.now()).inHours;
+    // final difference = DateTime.now().difference(lastDeductTime).inMinutes;
+    final difference = DateTime.now().difference(lastDeductTime).inSeconds;
+    if (difference >= 5) {
+      // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
+      // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
+      setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
+      await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
+      await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - (difference / 5).floor());
+    }
+    print("UPDATE TIME HERE!!!!");
+    print(lastDeductTime);
+    print(difference);
+
+  }
+
+  Timer scheduleTimeout([int seconds = 5]) => Timer(Duration(seconds: seconds), handleTimeout);
+  Future<void> handleTimeout() async {  // callback function
+    // Do some work.
+    updateTime();
+    // final user = Provider.of<MyUser>(context, listen: false);
+    // await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - 1);
+    // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
+    if (mounted) scheduleTimeout(5);
+    // setState(() => lastDeductTime = DateTime.now());
+    print("scheduleTimeout here!!!");
+  }
+
 }

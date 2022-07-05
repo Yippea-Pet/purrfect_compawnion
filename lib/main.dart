@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: AuthService().user,
       child: GetMaterialApp(
-        initialRoute: '/todo',
+        initialRoute: '/',
         routes: {
           '/': (context) => Wrapper(),
           '/welcome': (context) => Welcome(),

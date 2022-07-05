@@ -32,6 +32,12 @@ class DatabaseService {
     });
   }
 
+  Future updateDeductHungerTime(DateTime time) async {
+    return await users.doc(uid).collection("pet").doc("time").set({
+      'time': time,
+    });
+  }
+
   Future addTask(Task? task) async {
     return await users.doc(uid).collection("tasks").add({
       "id": task?.id,

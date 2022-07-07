@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/db/db_helper.dart';
+import 'package:purrfect_compawnion/pages/authenticate/forgot_password.dart';
 import 'package:purrfect_compawnion/pages/authenticate/login.dart';
 import 'package:purrfect_compawnion/pages/authenticate/register.dart';
 import 'package:purrfect_compawnion/pages/features/home.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => Home(),
           '/pethouse': (context) => PetHouse(),
           '/todo': (context) => ToDo(),
+          '/resetPassword': (context) => ForgotPasswordPage(),
         },
       ),
     );

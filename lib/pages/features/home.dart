@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
-import 'package:purrfect_compawnion/services/get_weather.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -47,57 +46,90 @@ class _HomeState extends State<Home> {
                 child: Image.asset('assets/Logo.png')
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Image.asset('assets/MovingSoccat.GIF'),
             ),
             Expanded(
-              flex: 1,
-              child: Center(
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/pethouse');
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          )),
-                      backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
-                    ),
-                    child: Text(
-                      'Pet House',
-                      style: TextStyle(
-                        // backgroundColor: Colors.pink[100],
-                        color: Colors.pink[400],
-                        fontSize: 40.0,
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                    child: SizedBox(
+                      width: 230,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/pethouse');
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                )),
+                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
+                          ),
+                          child: Text(
+                            'Pet House',
+                            style: TextStyle(
+                              // backgroundColor: Colors.pink[100],
+                              color: Colors.pink[400],
+                              fontSize: 40.0,
+                            ),
+                          )
                       ),
-                    )
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/todo');
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          )),
-                      backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
                     ),
-                    child: Text(
-                      'Tasks',
-                      style: TextStyle(
-                        // backgroundColor: Colors.pink[100],
-                        color: Colors.pink[400],
-                        fontSize: 40.0,
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 230,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/todo');
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                )),
+                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
+                          ),
+                          child: Text(
+                            'Tasks',
+                            style: TextStyle(
+                              // backgroundColor: Colors.pink[100],
+                              color: Colors.pink[400],
+                              fontSize: 40.0,
+                            ),
+                          )
                       ),
-                    )
-                ),
+                    ),
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 230,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/weatherPage');
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                )),
+                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
+                          ),
+                          child: Text(
+                            'Weather',
+                            style: TextStyle(
+                              // backgroundColor: Colors.pink[100],
+                              color: Colors.pink[400],
+                              fontSize: 40.0,
+                            ),
+                          )
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             // ElevatedButton(

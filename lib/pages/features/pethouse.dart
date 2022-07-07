@@ -174,12 +174,12 @@ class _PetHouseState extends State<PetHouse> {
                       ElevatedButton(
                         onPressed: () async {
                           if (foodQuantity > 0) {
-                            print(foodQuantity);
                             setState(() {
                               foodQuantity -= 1;
                               hungerLevel += 1;
                               petState = 1;
                             });
+                            scheduleResetSoccat(5250);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
                             print(foodQuantity);
@@ -297,8 +297,9 @@ class _PetHouseState extends State<PetHouse> {
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
       setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
+      final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
-      await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - (difference / 5).floor());
+      await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
     print("UPDATE TIME HERE!!!!");
     print(lastDeductTime);
@@ -310,12 +311,15 @@ class _PetHouseState extends State<PetHouse> {
   Future<void> handleTimeout() async {  // callback function
     // Do some work.
     updateTime();
-    // final user = Provider.of<MyUser>(context, listen: false);
-    // await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - 1);
-    // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
     if (mounted) scheduleTimeout(5);
-    // setState(() => lastDeductTime = DateTime.now());
     print("scheduleTimeout here!!!");
   }
 
+  Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);
+
+  Future<void> resetSoccat() async {
+    setState(() {
+      petState = 0;
+    });
+  }
 }

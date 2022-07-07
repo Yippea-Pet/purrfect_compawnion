@@ -9,6 +9,7 @@ import 'package:purrfect_compawnion/pages/authenticate/login.dart';
 import 'package:purrfect_compawnion/pages/authenticate/register.dart';
 import 'package:purrfect_compawnion/pages/features/home.dart';
 import 'package:purrfect_compawnion/pages/features/pethouse.dart';
+import 'package:purrfect_compawnion/pages/features/weather.dart';
 import 'package:purrfect_compawnion/pages/features/welcome.dart';
 import 'package:purrfect_compawnion/pages/features/todo_1.dart';
 import 'package:purrfect_compawnion/pages/wrapper.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/pethouse': (context) => PetHouse(),
           '/todo': (context) => ToDo(),
           '/resetPassword': (context) => ForgotPasswordPage(),
+          '/weatherPage': (context) => WeatherPage(),
         },
       ),
     );

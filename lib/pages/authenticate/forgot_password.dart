@@ -29,7 +29,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: Colors.red[200],
       ),
       body: Container(
-        color: Colors.red[50],
+        color: Colors.pink[50],
         child: Padding(
           padding: EdgeInsets.all(30),
           child: Form(

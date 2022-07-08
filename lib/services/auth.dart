@@ -47,6 +47,10 @@ class AuthService {
       return _userFromFirebaseUser(user);
   }
 
+  Future resetPassword(String email) async {
+    return await _auth.sendPasswordResetEmail(email: email.trim());
+  }
+
   // sign out
   Future signOut() async {
     try {

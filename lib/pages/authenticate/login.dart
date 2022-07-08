@@ -142,6 +142,18 @@ class _LoginState extends State<Login> {
                               fontSize: 14.0,
                             ),
                           ),
+                          GestureDetector(
+                            child: Text(
+                                'Forgot Password?',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue[600],
+                                fontSize: 14.0,
+
+                              ),
+                            ),
+                            onTap: () => Navigator.pushNamed(context, '/resetPassword'),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[

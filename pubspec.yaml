@@ -52,6 +52,8 @@ dependencies:
 
   path:
   percent_indicator: ^4.2.2
+  email_validator: ^2.0.1
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

@@ -32,6 +32,7 @@ class _PetHouseState extends State<PetHouse> {
   var db;
   late DateTime lastDeductTime;
 
+  bool _isFeedButtonDisabled = false;
   int petState = 0; // 0(default):sleeping, 1: eating, 2: playing
 
   @override
@@ -64,13 +65,6 @@ class _PetHouseState extends State<PetHouse> {
       name = data['name'];
       setState(() {});
     });
-
-    // var timeDoc = db.collection("users").doc(user.uid).collection("pet").doc("time");
-    // timeDoc.get().then((DocumentSnapshot doc) async {
-    //   dynamic data = doc.data() as Map<String, dynamic>;
-    //   lastDeductTime = data['time'].toDate();
-    //   setState(() {});
-    // });
 
     return loading
         ? Loading()
@@ -173,13 +167,20 @@ class _PetHouseState extends State<PetHouse> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () async {
-                          if (foodQuantity > 0) {
-                            print(foodQuantity);
+                          if (_isFeedButtonDisabled) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("I need some time to chew! ><")),
+                            );
+                          } else if (foodQuantity > 0) {
                             setState(() {
                               foodQuantity -= 1;
                               hungerLevel += 1;
                               petState = 1;
+                              _isFeedButtonDisabled = true;
                             });
+                            scheduleResetSoccat(5250);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
                             print(foodQuantity);
@@ -297,8 +298,9 @@ class _PetHouseState extends State<PetHouse> {
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
       setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
+      final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
-      await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - (difference / 5).floor());
+      await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
     print("UPDATE TIME HERE!!!!");
     print(lastDeductTime);
@@ -310,12 +312,16 @@ class _PetHouseState extends State<PetHouse> {
   Future<void> handleTimeout() async {  // callback function
     // Do some work.
     updateTime();
-    // final user = Provider.of<MyUser>(context, listen: false);
-    // await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, hungerLevel - 1);
-    // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
     if (mounted) scheduleTimeout(5);
-    // setState(() => lastDeductTime = DateTime.now());
     print("scheduleTimeout here!!!");
   }
 
+  Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);
+
+  Future<void> resetSoccat() async {
+    setState(() {
+      petState = 0;
+      _isFeedButtonDisabled = false;
+    });
+  }
 }

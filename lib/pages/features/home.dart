@@ -100,6 +100,31 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/weather');
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          )),
+                      backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
+                    ),
+                    child: Text(
+                      'Weather',
+                      style: TextStyle(
+                        // backgroundColor: Colors.pink[100],
+                        color: Colors.pink[400],
+                        fontSize: 40.0,
+                      ),
+                    )
+                ),
+              ),
+            ),
             // ElevatedButton(
             //     onPressed: () async {
             //       Weather weather = new Weather(location: 'Singapore', url: '??');

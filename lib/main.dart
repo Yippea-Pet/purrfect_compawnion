@@ -9,7 +9,9 @@ import 'package:purrfect_compawnion/pages/authenticate/register.dart';
 import 'package:purrfect_compawnion/pages/features/home.dart';
 import 'package:purrfect_compawnion/pages/features/pethouse.dart';
 import 'package:purrfect_compawnion/pages/features/welcome.dart';
+import 'package:purrfect_compawnion/pages/features/weather.dart';
 import 'package:purrfect_compawnion/pages/features/todo_1.dart';
+import 'package:purrfect_compawnion/pages/features/task_tile.dart';
 import 'package:purrfect_compawnion/pages/wrapper.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
 

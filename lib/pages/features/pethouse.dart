@@ -32,6 +32,7 @@ class _PetHouseState extends State<PetHouse> {
   var db;
   late DateTime lastDeductTime;
 
+  bool _isFeedButtonDisabled = false;
   int petState = 0; // 0(default):sleeping, 1: eating, 2: playing
 
   @override
@@ -64,13 +65,6 @@ class _PetHouseState extends State<PetHouse> {
       name = data['name'];
       setState(() {});
     });
-
-    // var timeDoc = db.collection("users").doc(user.uid).collection("pet").doc("time");
-    // timeDoc.get().then((DocumentSnapshot doc) async {
-    //   dynamic data = doc.data() as Map<String, dynamic>;
-    //   lastDeductTime = data['time'].toDate();
-    //   setState(() {});
-    // });
 
     return loading
         ? Loading()
@@ -173,11 +167,18 @@ class _PetHouseState extends State<PetHouse> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () async {
-                          if (foodQuantity > 0) {
+                          if (_isFeedButtonDisabled) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("I need some time to chew! ><")),
+                            );
+                          } else if (foodQuantity > 0) {
                             setState(() {
                               foodQuantity -= 1;
                               hungerLevel += 1;
                               petState = 1;
+                              _isFeedButtonDisabled = true;
                             });
                             scheduleResetSoccat(5250);
                             await DatabaseService(uid: user.uid).updateFoodData(
@@ -320,6 +321,7 @@ class _PetHouseState extends State<PetHouse> {
   Future<void> resetSoccat() async {
     setState(() {
       petState = 0;
+      _isFeedButtonDisabled = false;
     });
   }
 }

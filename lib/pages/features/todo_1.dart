@@ -27,6 +27,7 @@ class _ToDoState extends State<ToDo> {
   DateTime _selectedDate = DateTime.now();
   final _taskController = Get.put(TaskController());
   var notifyHelper;
+  bool loading = false;
 
   @override
   void initState() {
@@ -42,21 +43,23 @@ class _ToDoState extends State<ToDo> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
-    return Scaffold(
-      appBar: _appBar(),
-      body: Column(
-        children: [
-          _addTaskBar(),
-          _addDateBar(),
-          SizedBox(
-            height: 10,
-          ),
-          _showTasks(user),
+    return loading
+            ? Loading()
+            : Scaffold(
+              appBar: _appBar(),
+              body: Column(
+                children: [
+                  _addTaskBar(),
+                  _addDateBar(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _showTasks(user),
 
-        ],
-      ),
-    );
-  }
+                ],
+              ),
+            );
+          }
 
   _showTasks(user) {
     // final user = Provider.of<MyUser>(context);

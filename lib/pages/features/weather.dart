@@ -11,12 +11,16 @@ class Weather extends StatelessWidget {
         title: Text('weather',
         style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        backgroundColor: Colors.red[100],
+        backgroundColor: Colors.red[200],
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/rainbg.jpg"),
+
+            //BACKGROUND!!!!!!!!!!!!
+
+            //image: AssetImage("assets/rainbg.jpg"),
+            image: AssetImage("assets/sunnybg.jpg"),
           fit: BoxFit.cover,
           ),
         ),
@@ -45,7 +49,7 @@ class Weather extends StatelessWidget {
                           color: Colors.white),
                     ),
                   ),
-                Text(" 26°",
+                Text(" 31°",
                   style: GoogleFonts.heebo(
                     textStyle: TextStyle(
                         fontSize: 90,
@@ -57,21 +61,21 @@ class Weather extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                  Text("rainy",
+                  Text("clear",
                     style: GoogleFonts.lato(
                       textStyle: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
-                          color: Colors.white),
+                          color: Colors.black54),
                     ),
                   ),
                   SizedBox(width: 40,),
-                  Text("light drizzle",
+                  Text("clear sky",
                     style: GoogleFonts.lato(
                       textStyle: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
-                          color: Colors.white),
+                          color: Colors.black54),
                     ),
                   ),
                 ]
@@ -89,21 +93,21 @@ class Weather extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("H: 24°",
+                        Text("H: 34°",
                           style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white),
+                                color: Colors.black54),
                           ),
                         ),
                         SizedBox(width: 50,),
-                        Text("L: 18°",
+                        Text("L: 29°",
                           style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white),
+                                color: Colors.black54),
                           ),
                         ),
                       ]
@@ -113,7 +117,11 @@ class Weather extends StatelessWidget {
               ),
               Expanded(
                   flex: 5,
-                  child: Image.asset('assets/rainanimation.GIF')
+
+                  //SOCCAT ANIMATION !!!!!!!!!!!
+
+                  //child: Image.asset('assets/rainanimation.GIF')
+                  child: Image.asset('assets/sunanimation2.GIF')
               ),
               Expanded(
                 flex: 1,
@@ -126,7 +134,7 @@ class Weather extends StatelessWidget {
                           textStyle: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: Colors.white),
+                              color: Colors.black54),
                         ),
                       ),
                     ]

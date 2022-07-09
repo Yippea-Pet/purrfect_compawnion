@@ -37,6 +37,6 @@ TextStyle get titleStyle {
         color: Colors.black),
   );
 }
-const taskAmber = Color(0xFFFFB300);
-const taskRed = Color(0xFFD32F2F);
-const taskBlue = Color(0xFF1976D2);
+const taskAmber = Color(0xFFF197CC);
+const taskRed = Color(0xFFFFACBC);
+const taskBlue = Color(0xFFFEC4B0);

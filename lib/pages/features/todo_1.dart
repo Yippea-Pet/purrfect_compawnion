@@ -9,12 +9,13 @@ import 'package:purrfect_compawnion/models/task.dart';
 import 'package:purrfect_compawnion/controllers/task_controller.dart';
 import 'package:purrfect_compawnion/pages/features/add_task_bar.dart';
 import 'package:purrfect_compawnion/pages/ui/widgets/button.dart';
-import 'package:purrfect_compawnion/pages/ui/widgets/task_tile.dart';
+// import 'package:purrfect_compawnion/pages/ui/widgets/task_list.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:purrfect_compawnion/services/notification_services.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:get/get.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
+import 'package:purrfect_compawnion/pages/features/task_list.dart';
 
 import '../../models/myuser.dart';
 
@@ -236,10 +237,16 @@ class _ToDoState extends State<ToDo> {
   _buildTaskList(QuerySnapshot snapshot) {
     final user = Provider.of<MyUser>(context);
 
+    return StreamProvider<List<Task>?>.value(
+      initialData: null,
+      value: DatabaseService().tasks,
+      child: TaskList(),
+    );
     return ListView.builder(
       itemCount: snapshot.docs.length,
       itemBuilder: (context, index) {
         final doc = snapshot.docs[index];
+        return TaskList();
          return Dismissible(
              key: Key(doc.id),
              background: Container(color: Colors.red),

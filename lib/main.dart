@@ -11,7 +11,7 @@ import 'package:purrfect_compawnion/pages/features/pethouse.dart';
 import 'package:purrfect_compawnion/pages/features/welcome.dart';
 import 'package:purrfect_compawnion/pages/features/weather.dart';
 import 'package:purrfect_compawnion/pages/features/todo_1.dart';
-import 'package:purrfect_compawnion/pages/features/task_tile.dart';
+import 'package:purrfect_compawnion/pages/features/task_list.dart';
 import 'package:purrfect_compawnion/pages/wrapper.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => Home(),
           '/pethouse': (context) => PetHouse(),
           '/todo': (context) => ToDo(),
-          '/tasktile': (context) => TaskTile(),
+          '/tasktile': (context) => TaskList(),
           '/weather': (context) => Weather()
         },
       ),

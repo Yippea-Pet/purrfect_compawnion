@@ -8,89 +8,114 @@ import 'package:purrfect_compawnion/shared/loading.dart';
 
 import '../ui/widgets/task_tile.dart';
 
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
+  const TaskList({Key? key}) : super(key: key);
+
+  @override
+  State<TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser?>(context);
-
     final taskList = Provider.of<List<Task>?>(context) ?? [];
-
+    print(taskList);
     return ListView.builder(
+
       itemCount: taskList.length,
       itemBuilder: (context, index) {
+        return Text("data");
         return TaskTile(
-            task: taskList[index]
+            task: taskList[index],
         );
       },
     );
-
-    return Padding(
-        padding: EdgeInsets.only(top: 8.0),
-        child: Card(
-            margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 25.0,
-                backgroundColor: Colors.pink[100],
-              ),
-              title: _showTitle(user),
-              subtitle: _showNote(user),
-            )));
-  }
-
-  _showTitle(user) {
-    return user != null
-        ? StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.uid)
-                .collection("tasks")
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData)
-                return Loading();
-              else {
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final doc = snapshot.data!.docs[index];
-                        return ListTile(
-                          title: Text(doc["title"]),
-                        );
-                      }),
-                );
-              }
-            },
-          )
-        : null;
-  }
-
-  _showNote(user) {
-    return user != null
-        ? StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.uid)
-                .collection("tasks")
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData)
-                return Loading();
-              else {
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final doc = snapshot.data!.docs[index];
-                        return ListTile(
-                          title: Text(doc["note"]),
-                        );
-                      }),
-                );
-              }
-            },
-          )
-        : null;
   }
 }
+
+// class TaskList extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final user = Provider.of<MyUser?>(context);
+//
+//     final taskList = Provider.of<List<Task>?>(context) ?? [];
+//
+//     return ListView.builder(
+//       itemCount: taskList.length,
+//       itemBuilder: (context, index) {
+//         return TaskTile(
+//             task: taskList[index]
+//         );
+//       },
+//     );
+//
+//     return Padding(
+//         padding: EdgeInsets.only(top: 8.0),
+//         child: Card(
+//             margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+//             child: ListTile(
+//               leading: CircleAvatar(
+//                 radius: 25.0,
+//                 backgroundColor: Colors.pink[100],
+//               ),
+//               title: _showTitle(user),
+//               subtitle: _showNote(user),
+//             )));
+//   }
+//
+//   _showTitle(user) {
+//     return user != null
+//         ? StreamBuilder<QuerySnapshot>(
+//             stream: FirebaseFirestore.instance
+//                 .collection('users')
+//                 .doc(user.uid)
+//                 .collection("tasks")
+//                 .snapshots(),
+//             builder: (context, snapshot) {
+//               if (!snapshot.hasData)
+//                 return Loading();
+//               else {
+//                 return Expanded(
+//                   child: ListView.builder(
+//                       itemCount: snapshot.data!.docs.length,
+//                       itemBuilder: (context, index) {
+//                         final doc = snapshot.data!.docs[index];
+//                         return ListTile(
+//                           title: Text(doc["title"]),
+//                         );
+//                       }),
+//                 );
+//               }
+//             },
+//           )
+//         : null;
+//   }
+//
+//   _showNote(user) {
+//     return user != null
+//         ? StreamBuilder<QuerySnapshot>(
+//             stream: FirebaseFirestore.instance
+//                 .collection('users')
+//                 .doc(user.uid)
+//                 .collection("tasks")
+//                 .snapshots(),
+//             builder: (context, snapshot) {
+//               if (!snapshot.hasData)
+//                 return Loading();
+//               else {
+//                 return Expanded(
+//                   child: ListView.builder(
+//                       itemCount: snapshot.data!.docs.length,
+//                       itemBuilder: (context, index) {
+//                         final doc = snapshot.data!.docs[index];
+//                         return ListTile(
+//                           title: Text(doc["note"]),
+//                         );
+//                       }),
+//                 );
+//               }
+//             },
+//           )
+//         : null;
+//   }
+// }

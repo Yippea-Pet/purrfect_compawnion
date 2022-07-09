@@ -55,75 +55,76 @@ class _ToDoState extends State<ToDo> {
                   SizedBox(
                     height: 10,
                   ),
-                  _showTasks(user),
-
+                  Expanded(
+                    child: _buildTaskList(),
+                  )
                 ],
               ),
             );
           }
 
-  _showTasks(user) {
-    // final user = Provider.of<MyUser>(context);
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').doc(user.uid).collection("tasks").snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return Loading();
-        else {
-          return Expanded(
-              child: _buildTaskList(snapshot.data!),
-          );
-        }
-      },
-    );
-    // final tasks = DatabaseService(uid: user.uid).collection("users");
-    // return Column(
-    //   children: [
-    //     StreamBuilder(
-    //         builder: (BuildContext context, AsyncSnapshot))
-    //   ],
-    // );
-    // return Expanded(
-    //   child: Obx(() {
-    //     return ListView.builder(
-    //         itemCount: _taskController.taskList.length,
-    //         itemBuilder: (_, index) {
-    //           print(_taskController.taskList.length);
-    //           /*AnimationConfiguration.staggeredList(
-    //           position: index,
-    //           child: SlideAnimation(
-    //               child: FadeInAnimation(
-    //                 child: Row(
-    //                   children: [
-    //                     GestureDetector(
-    //                       onTap: () {
-    //                         _showBottomSheet(context, _taskController.taskList[index]);
-    //                       },
-    //                       child: TaskTile(_taskController.taskList[index])
-    //                     )
-    //                   ],
-    //                 )
-    //               )
-    //           )
-    //         );
-    //         GestureDetector(
-    //         onTap: () {
-    //           _taskController.delete(_taskController.taskList[index]);
-    //         },
-    //         child: Container(
-    //           width: 100,
-    //           height: 50,
-    //           color: Colors.green,
-    //           margin: const EdgeInsets.only(bottom: 10),
-    //           child: Text(
-    //             _taskController.taskList[index].title.toString()
-    //           ),
-    //         ),
-    //       );*/
-    //         });
-    //   }),
-    // );
-  }
+  // _showTasks(user) {
+  //   // final user = Provider.of<MyUser>(context);
+  //
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance.collection('users').doc(user.uid).collection("tasks").snapshots(),
+  //     builder: (context, snapshot) {
+  //       if (!snapshot.hasData) return Loading();
+  //       else {
+  //         return Expanded(
+  //             child: _buildTaskList(snapshot.data!),
+  //         );
+  //       }
+  //     },
+  //   );
+  //   // final tasks = DatabaseService(uid: user.uid).collection("users");
+  //   // return Column(
+  //   //   children: [
+  //   //     StreamBuilder(
+  //   //         builder: (BuildContext context, AsyncSnapshot))
+  //   //   ],
+  //   // );
+  //   // return Expanded(
+  //   //   child: Obx(() {
+  //   //     return ListView.builder(
+  //   //         itemCount: _taskController.taskList.length,
+  //   //         itemBuilder: (_, index) {
+  //   //           print(_taskController.taskList.length);
+  //   //           /*AnimationConfiguration.staggeredList(
+  //   //           position: index,
+  //   //           child: SlideAnimation(
+  //   //               child: FadeInAnimation(
+  //   //                 child: Row(
+  //   //                   children: [
+  //   //                     GestureDetector(
+  //   //                       onTap: () {
+  //   //                         _showBottomSheet(context, _taskController.taskList[index]);
+  //   //                       },
+  //   //                       child: TaskTile(_taskController.taskList[index])
+  //   //                     )
+  //   //                   ],
+  //   //                 )
+  //   //               )
+  //   //           )
+  //   //         );
+  //   //         GestureDetector(
+  //   //         onTap: () {
+  //   //           _taskController.delete(_taskController.taskList[index]);
+  //   //         },
+  //   //         child: Container(
+  //   //           width: 100,
+  //   //           height: 50,
+  //   //           color: Colors.green,
+  //   //           margin: const EdgeInsets.only(bottom: 10),
+  //   //           child: Text(
+  //   //             _taskController.taskList[index].title.toString()
+  //   //           ),
+  //   //         ),
+  //   //       );*/
+  //   //         });
+  //   //   }),
+  //   // );
+  // }
 
   /*_showBottomSheet(BuildContext context, Task task) {
     Get.bottomSheet(
@@ -234,7 +235,8 @@ class _ToDoState extends State<ToDo> {
     );
   }
 
-  _buildTaskList(QuerySnapshot snapshot) {
+  _buildTaskList() {
+    // return TaskList();
     final user = Provider.of<MyUser>(context);
 
     return StreamProvider<List<Task>?>.value(
@@ -242,25 +244,25 @@ class _ToDoState extends State<ToDo> {
       value: DatabaseService().tasks,
       child: TaskList(),
     );
-    return ListView.builder(
-      itemCount: snapshot.docs.length,
-      itemBuilder: (context, index) {
-        final doc = snapshot.docs[index];
-        return TaskList();
-         return Dismissible(
-             key: Key(doc.id),
-             background: Container(color: Colors.red),
-             onDismissed: (direction) {
-               DatabaseService(uid: user.uid).deleteTask(doc.id);
-             },
-             child: ListTile(
-               title: Text(doc["title"]),
-             )
-         );
-        return ListTile(
-          title: Text(doc["title"]),
-        );
-      });
+    // return ListView.builder(
+    //   itemCount: snapshot.docs.length,
+    //   itemBuilder: (context, index) {
+    //     final doc = snapshot.docs[index];
+    //     return TaskList();
+    //      return Dismissible(
+    //          key: Key(doc.id),
+    //          background: Container(color: Colors.red),
+    //          onDismissed: (direction) {
+    //            DatabaseService(uid: user.uid).deleteTask(doc.id);
+    //          },
+    //          child: ListTile(
+    //            title: Text(doc["title"]),
+    //          )
+    //      );
+    //     return ListTile(
+    //       title: Text(doc["title"]),
+    //     );
+    //   });
   }
 
 }

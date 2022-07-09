@@ -45,7 +45,6 @@ class DatabaseService {
 
   Future addTask(Task? task) async {
     return await users.doc(uid).collection("tasks").add({
-      "id": task?.id,
       "title": task?.title,
       "note": task?.note,
       "isCompleted": task?.isCompleted,
@@ -62,27 +61,9 @@ class DatabaseService {
     return await users.doc(uid).collection("tasks").doc(id).delete();
   }
 
-  List<Task> _taskListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map((doc) => Task(
-              id: doc.id as int,
-              title: doc.get('title'),
-              note: doc.get('note'),
-              isCompleted: doc.get('isCompleted'),
-              date: doc.get('date'),
-              startTime: doc.get('startTime'),
-              endTime: doc.get('endTime'),
-              color: doc.get('color'),
-              remind: doc.get('remind'),
-              repeat: doc.get('repeat'),
-            ))
-        .toList();
+  Future completeTask(String? id) async {
+    return await users.doc(uid).collection("tasks").doc(id).update({
+      "isCompleted": 1,
+    });
   }
-
-  // Get Stream of brews
-  Stream<List<Task>> get tasks {
-    final CollectionReference taskCollection = FirebaseFirestore.instance.collection('users').doc(uid).collection("tasks");
-    return taskCollection.snapshots().map(_taskListFromSnapshot);
-  }
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 
 class MyInputField extends StatelessWidget {
   final String title;
@@ -25,12 +26,7 @@ class MyInputField extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black),
-              ),
+              style: titleStyle,
             ),
             Container(
                 height: 52,

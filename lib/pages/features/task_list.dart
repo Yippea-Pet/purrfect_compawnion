@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/models/myuser.dart';
 import 'package:purrfect_compawnion/models/task.dart';
-import 'package:purrfect_compawnion/pages/features/todo_1.dart';
+import 'package:purrfect_compawnion/services/database.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
-
 import '../ui/widgets/task_tile.dart';
 
 class TaskList extends StatefulWidget {
-  const TaskList({Key? key}) : super(key: key);
+  DateTime selectedDate = DateTime.now();
+  TaskList({Key? key, required this.selectedDate}) : super(key: key);
 
   @override
   State<TaskList> createState() => _TaskListState();
@@ -17,105 +22,146 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   @override
-  Widget build(BuildContext context) {
-    final taskList = Provider.of<List<Task>?>(context) ?? [];
-    print(taskList);
-    return ListView.builder(
 
-      itemCount: taskList.length,
-      itemBuilder: (context, index) {
-        return Text("data");
-        return TaskTile(
-            task: taskList[index],
-        );
+  late DateTime _selectedDate;
+  var notifyHelper;
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<MyUser?>(context);
+    _selectedDate = widget.selectedDate;
+    return _showTaskList(user);
+  }
+
+  _showTaskList(user) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection("tasks")
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Loading();
+        else {
+          return Expanded(
+            child: ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final doc = snapshot.data!.docs[index];
+                  Task task = _taskFromDoc(doc);
+                  if (task.repeat == "Daily" || task.date == DateFormat.yMd().format(_selectedDate)) {
+                    return AnimationConfiguration.staggeredList(
+                        position: index,
+                        child: SlideAnimation(
+                            child: FadeInAnimation(
+                                child: Row(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          _showBottomSheet(context, task, doc.id);
+                                        },
+                                        child: TaskTile(task: task))
+                                  ],
+                                ))));
+                  } else {
+                    return Container();
+                  }
+                }),
+          );
+        }
       },
     );
   }
-}
 
-// class TaskList extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final user = Provider.of<MyUser?>(context);
-//
-//     final taskList = Provider.of<List<Task>?>(context) ?? [];
-//
-//     return ListView.builder(
-//       itemCount: taskList.length,
-//       itemBuilder: (context, index) {
-//         return TaskTile(
-//             task: taskList[index]
-//         );
-//       },
-//     );
-//
-//     return Padding(
-//         padding: EdgeInsets.only(top: 8.0),
-//         child: Card(
-//             margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-//             child: ListTile(
-//               leading: CircleAvatar(
-//                 radius: 25.0,
-//                 backgroundColor: Colors.pink[100],
-//               ),
-//               title: _showTitle(user),
-//               subtitle: _showNote(user),
-//             )));
-//   }
-//
-//   _showTitle(user) {
-//     return user != null
-//         ? StreamBuilder<QuerySnapshot>(
-//             stream: FirebaseFirestore.instance
-//                 .collection('users')
-//                 .doc(user.uid)
-//                 .collection("tasks")
-//                 .snapshots(),
-//             builder: (context, snapshot) {
-//               if (!snapshot.hasData)
-//                 return Loading();
-//               else {
-//                 return Expanded(
-//                   child: ListView.builder(
-//                       itemCount: snapshot.data!.docs.length,
-//                       itemBuilder: (context, index) {
-//                         final doc = snapshot.data!.docs[index];
-//                         return ListTile(
-//                           title: Text(doc["title"]),
-//                         );
-//                       }),
-//                 );
-//               }
-//             },
-//           )
-//         : null;
-//   }
-//
-//   _showNote(user) {
-//     return user != null
-//         ? StreamBuilder<QuerySnapshot>(
-//             stream: FirebaseFirestore.instance
-//                 .collection('users')
-//                 .doc(user.uid)
-//                 .collection("tasks")
-//                 .snapshots(),
-//             builder: (context, snapshot) {
-//               if (!snapshot.hasData)
-//                 return Loading();
-//               else {
-//                 return Expanded(
-//                   child: ListView.builder(
-//                       itemCount: snapshot.data!.docs.length,
-//                       itemBuilder: (context, index) {
-//                         final doc = snapshot.data!.docs[index];
-//                         return ListTile(
-//                           title: Text(doc["note"]),
-//                         );
-//                       }),
-//                 );
-//               }
-//             },
-//           )
-//         : null;
-//   }
-// }
+  _taskFromDoc(doc) {
+    return Task(
+      title: doc['title'],
+      note: doc['note'],
+      isCompleted: doc['isCompleted'],
+      date: doc['date'],
+      startTime: doc['startTime'],
+      endTime: doc['endTime'],
+      color: doc['color'],
+      remind: doc['remind'],
+      repeat: doc['repeat'],
+    );
+  }
+
+  _showBottomSheet(BuildContext context, Task task, String id) {
+    final user = Provider.of<MyUser>(context, listen: false);
+
+    Get.bottomSheet(Container(
+      padding: const EdgeInsets.only(top: 4),
+      height: task.isCompleted == 1
+          ? MediaQuery.of(context).size.height * 0.24
+          : MediaQuery.of(context).size.height * 0.32,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            height: 6,
+            width: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey,
+            ),
+          ),
+          Spacer(),
+          task.isCompleted == 1
+              ? Container()
+              : _buttonSheetButton(
+                  label: "Task Completed",
+                  onTap: () async => {
+                        DatabaseService(uid: user.uid).completeTask(id),
+                        Get.back(),
+                      },
+                  color: Colors.blue,
+                  context: context),
+          _buttonSheetButton(
+              label: "Delete Task",
+              onTap: () async => {
+                    DatabaseService(uid: user.uid).deleteTask(id),
+                    Get.back(),
+                  },
+              color: Colors.red,
+              context: context),
+          _buttonSheetButton(
+              label: "Cancel",
+              onTap: () => Get.back(),
+              color: Colors.white,
+              isClose: true,
+              context: context),
+        ],
+      ),
+    ));
+  }
+
+  _buttonSheetButton(
+      {required String label,
+      required Function()? onTap,
+      required Color color,
+      bool isClose = false,
+      required BuildContext context}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+        height: 50,
+        width: MediaQuery.of(context).size.width * 0.9,
+        decoration: BoxDecoration(
+          color: isClose ? Colors.transparent : color,
+          borderRadius: BorderRadius.circular(20.0),
+          border: isClose ? Border.all(color: Colors.grey) : null,
+        ),
+        child: Center(
+            child: Text(
+          label,
+          style: isClose
+              ? titleStyle
+              : titleStyle.copyWith(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+        )),
+      ),
+    );
+  }
+}

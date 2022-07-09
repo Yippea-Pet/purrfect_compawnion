@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Task {
-  int? id;
   String? title;
   String? note;
   int? isCompleted;
@@ -15,7 +14,6 @@ class Task {
   String? repeat;
 
   Task({
-    this.id,
     this.title,
     this.note,
     this.isCompleted,
@@ -28,7 +26,6 @@ class Task {
   });
 
   Task.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
     title = json['title'];
     note = json['note'];
     isCompleted = json['isCompleted'];
@@ -42,7 +39,6 @@ class Task {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
     data['title'] = this.title;
     data['date'] = this.date;
     data['note'] = this.note;

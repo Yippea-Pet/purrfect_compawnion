@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:purrfect_compawnion/models/task.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 
 class TaskTile extends StatelessWidget {
   final Task? task;
@@ -19,7 +20,11 @@ class TaskTile extends StatelessWidget {
         //  width: SizeConfig.screenWidth * 0.78,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.pink[50],
+          color: task!.color == 0
+              ? taskBlue
+              : task!.color == 1
+                  ? taskRed
+                  : taskAmber,
         ),
         child: Row(children: [
           Expanded(
@@ -32,7 +37,8 @@ class TaskTile extends StatelessWidget {
                     textStyle: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: Colors.white
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -50,8 +56,10 @@ class TaskTile extends StatelessWidget {
                     Text(
                       "${task!.startTime} - ${task!.endTime}",
                       style: GoogleFonts.lato(
-                        textStyle:
-                            TextStyle(fontSize: 13, color: Colors.grey[100]),
+                        textStyle: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[100]
+                        ),
                       ),
                     ),
                   ],

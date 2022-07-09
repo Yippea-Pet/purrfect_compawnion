@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // const textBoxColor = Color(Colors.teal[50]);
 const textInputDecoration = InputDecoration(
@@ -27,3 +28,15 @@ Color checkBoxMaterialState(Set<MaterialState> states) {
   }
   return Colors.blue;
 }
+
+TextStyle get titleStyle {
+  return GoogleFonts.lato(
+    textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Colors.black),
+  );
+}
+const taskAmber = Color(0xFFFFB300);
+const taskRed = Color(0xFFD32F2F);
+const taskBlue = Color(0xFF1976D2);

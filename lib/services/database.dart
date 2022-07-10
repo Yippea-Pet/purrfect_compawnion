@@ -54,6 +54,7 @@ class DatabaseService {
       "color": task?.color,
       "remind": task?.remind,
       "repeat": task?.repeat,
+      "difficulty": task?.difficulty,
     });
   }
 

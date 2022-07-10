@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +33,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
+  int _selectedDifficulty = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -172,19 +175,50 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ),
               ),
               SizedBox(height: 12.0),
+              _colorPallete(),
+              SizedBox(height: 12.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _colorPallete(),
-                  Container(
-                    width: 20,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Difficulty",
+                        style: titleStyle,
+                      ),
+                      SizedBox(height: 6.0),
+                      Row(
+                        children: [
+                          Text("Easy"),
+                          Wrap(
+                            children: List<Widget>.generate(
+                                3,
+                                    (index) => GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedDifficulty = index;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Icon(
+                                      _selectedDifficulty == index ? Icons.check_circle_outline : Icons.circle_outlined,
+                                    ),
+                                  ),
+                                )),
+                          ),
+                          Text("Hard"),
+                        ],
+                      ),
+
+                    ],
                   ),
                   MyButton(
-                      label: "Create Task", onTap: () => _validateDate(user)
-                  )
+                      label: "Create Task", onTap: () => _validateDate(user))
                 ],
-              )
+              ),
+              SizedBox(height: 20.0),
             ],
           ),
         ),
@@ -214,6 +248,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: _selectedRepeat,
       color: _selectedColor,
       isCompleted: 0,
+      difficulty: _selectedDifficulty,
     ));
   }
   _appBar(BuildContext context) {
@@ -290,31 +325,31 @@ class _AddTaskPageState extends State<AddTaskPage> {
         Wrap(
           children: List<Widget>.generate(
               3,
-                  (index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedColor = index;
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: index == 0
-                        ? taskBlue
-                        : index == 1
-                        ? taskRed
-                        : taskAmber,
-                    child: _selectedColor == index
-                        ? Icon(
-                      Icons.done,
-                      color: Colors.white,
-                      size: 16.0,
-                    )
-                        : Container(),
-                  ),
-                ),
-              )),
+              (index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedColor = index;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CircleAvatar(
+                        radius: 14,
+                        backgroundColor: index == 0
+                            ? taskColor1
+                            : index == 1
+                                ? taskColor2
+                                : taskColor3,
+                        child: _selectedColor == index
+                            ? Icon(
+                                Icons.done,
+                                color: Colors.white,
+                                size: 16.0,
+                              )
+                            : Container(),
+                      ),
+                    ),
+                  )),
         )
       ],
     );

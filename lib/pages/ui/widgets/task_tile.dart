@@ -21,10 +21,10 @@ class TaskTile extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: task!.color == 0
-              ? taskBlue
+              ? taskColor1
               : task!.color == 1
-                  ? taskRed
-                  : taskAmber,
+                  ? taskColor2
+                  : taskColor3,
         ),
         child: Row(children: [
           Expanded(
@@ -33,13 +33,7 @@ class TaskTile extends StatelessWidget {
               children: [
                 Text(
                   task?.title ?? "",
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    ),
-                  ),
+                  style: taskTitleStyle,
                 ),
                 SizedBox(
                   height: 12,
@@ -49,27 +43,20 @@ class TaskTile extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.access_time_rounded,
-                      color: Colors.grey[200],
+                      color: taskTileFontColor,
                       size: 18,
                     ),
                     SizedBox(width: 4),
                     Text(
                       "${task!.startTime} - ${task!.endTime}",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[100]
-                        ),
-                      ),
+                      style: taskTimeStyle,
                     ),
                   ],
                 ),
                 SizedBox(height: 12),
                 Text(
                   task?.note ?? "",
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(fontSize: 15, color: Colors.grey[100]),
-                  ),
+                  style: taskNoteStyle,
                 ),
               ],
             ),
@@ -78,7 +65,7 @@ class TaskTile extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 10),
             height: 60,
             width: 0.5,
-            color: Colors.grey[200]!.withOpacity(0.7),
+            color: taskTileFontColor.withOpacity(0.7),
           ),
           RotatedBox(
             quarterTurns: 3,
@@ -88,7 +75,7 @@ class TaskTile extends StatelessWidget {
                 textStyle: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: taskTileFontColor),
               ),
             ),
           ),

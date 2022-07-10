@@ -37,6 +37,36 @@ TextStyle get titleStyle {
         color: Colors.black),
   );
 }
-const taskAmber = Color(0xFFF197CC);
-const taskRed = Color(0xFFFFACBC);
-const taskBlue = Color(0xFFFEC4B0);
+
+TextStyle get taskTitleStyle {
+  return GoogleFonts.lato(
+    textStyle: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: taskTileFontColor
+    ),
+  );
+}
+
+TextStyle get taskTimeStyle {
+  return GoogleFonts.lato(
+    textStyle: TextStyle(
+        fontSize: 13,
+        color: taskTileFontColor
+    ),
+  );
+}
+
+TextStyle get taskNoteStyle {
+  return GoogleFonts.lato(
+    textStyle: TextStyle(
+        fontSize: 15,
+        color: taskTileFontColor
+    ),
+  );
+}
+
+const taskColor3 = Color(0xFFF197CC);
+const taskColor2 = Color(0xFFFFACBC);
+const taskColor1 = Color(0xFFFEC4B0);
+const taskTileFontColor = Color(0xFF4E342E); // Colors.brown[800

@@ -125,6 +125,7 @@ class _TaskListState extends State<TaskList> {
                   },
               color: Colors.red,
               context: context),
+          Spacer(),
           _buttonSheetButton(
               label: "Cancel",
               onTap: () => Get.back(),

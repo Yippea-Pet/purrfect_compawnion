@@ -26,7 +26,7 @@ class _PetHouseState extends State<PetHouse> {
   int friendshipLevel = 0;
   int foodQuantity = 0;
   String? name;
-  bool showPetMaxLevelDialog = false;
+  late bool doNotShowPetMaxLevelDialog;
   bool isChecked = false;
   bool loading = false;
   var db;
@@ -63,6 +63,12 @@ class _PetHouseState extends State<PetHouse> {
     petName.get().then((DocumentSnapshot doc) async {
       dynamic data = doc.data() as Map<String, dynamic>;
       name = data['name'];
+    });
+
+    var preference = db.collection("users").doc(user.uid).collection("preference").doc("friendshipLevel");
+    preference.get().then((DocumentSnapshot doc) async {
+      dynamic data = doc.data() as Map<String, dynamic>;
+      doNotShowPetMaxLevelDialog = data['doNotShow'] ?? false;
       setState(() {});
     });
 
@@ -180,7 +186,7 @@ class _PetHouseState extends State<PetHouse> {
                               petState = 1;
                               _isFeedButtonDisabled = true;
                             });
-                            scheduleResetSoccat(5250);
+                            scheduleResetSoccat(4900);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
                             print(foodQuantity);
@@ -225,8 +231,7 @@ class _PetHouseState extends State<PetHouse> {
                           });
                           await DatabaseService(uid: user.uid)
                               .updatePetData(friendshipLevel, hungerLevel);
-                          if (friendshipLevel >= 100 &&
-                              !showPetMaxLevelDialog) {
+                          if (friendshipLevel >= 100 && !doNotShowPetMaxLevelDialog) {
                             return showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>
@@ -241,12 +246,12 @@ class _PetHouseState extends State<PetHouse> {
                                           Checkbox(
                                               checkColor: Colors.white,
                                               fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
-                                              value: showPetMaxLevelDialog,
-                                              onChanged: (bool? value) {
+                                              value: doNotShowPetMaxLevelDialog,
+                                              onChanged: (bool? value) async {
                                                 setState(() {
-                                                  showPetMaxLevelDialog =
-                                                      value ?? false;
+                                                  doNotShowPetMaxLevelDialog = value ?? false;
                                                 });
+                                                await DatabaseService(uid: user.uid).doNotShowFriendshipLevelDialog(doNotShowPetMaxLevelDialog);
                                               }),
                                           TextButton(
                                             onPressed: () =>

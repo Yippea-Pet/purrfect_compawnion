@@ -68,4 +68,10 @@ class DatabaseService {
       "isCompleted": 1,
     });
   }
+
+  Future doNotShowFriendshipLevelDialog(bool val) async {
+    return await users.doc(uid).collection("preference").doc("friendshipLevel").set({
+      "doNotShow": val,
+    });
+  }
 }

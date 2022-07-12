@@ -10,10 +10,12 @@ import 'package:purrfect_compawnion/models/task.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
+import '../../services/notification_services.dart';
 import '../ui/widgets/task_tile.dart';
 
 class TaskList extends StatefulWidget {
   DateTime selectedDate = DateTime.now();
+
   TaskList({Key? key, required this.selectedDate}) : super(key: key);
 
   @override
@@ -21,14 +23,18 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  @override
+  List<String> taskDifficultyList = ["Easy", "Normal", "Hard"];
+  List<int?> reward = [1, 2, 3];
 
   late DateTime _selectedDate;
   var notifyHelper;
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
     _selectedDate = widget.selectedDate;
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
     return _showTaskList(user);
   }
 
@@ -49,20 +55,28 @@ class _TaskListState extends State<TaskList> {
                 itemBuilder: (context, index) {
                   final doc = snapshot.data!.docs[index];
                   Task task = _taskFromDoc(doc);
-                  if (task.repeat == "Daily" || task.date == DateFormat.yMd().format(_selectedDate)) {
+                  if (task.repeat == "Daily" ||
+                      task.date == DateFormat.yMd().format(_selectedDate)) {
+                    DateTime taskStart = DateFormat.jm().parse(task.startTime!);
+                    var taskStartTime = DateFormat("HH:mm").format(taskStart);
+                    notifyHelper.scheduledNotification(
+                      int.parse(taskStartTime.split(":")[0]),
+                      int.parse(taskStartTime.split(":")[1]),
+                      task,
+                    );
                     return AnimationConfiguration.staggeredList(
                         position: index,
                         child: SlideAnimation(
                             child: FadeInAnimation(
                                 child: Row(
-                                  children: [
-                                    GestureDetector(
-                                        onTap: () {
-                                          _showBottomSheet(context, task, doc.id);
-                                        },
-                                        child: TaskTile(task: task))
-                                  ],
-                                ))));
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  _showBottomSheet(context, task, doc.id);
+                                },
+                                child: TaskTile(task: task))
+                          ],
+                        ))));
                   } else {
                     return Container();
                   }
@@ -84,6 +98,7 @@ class _TaskListState extends State<TaskList> {
       color: doc['color'],
       remind: doc['remind'],
       repeat: doc['repeat'],
+      difficulty: doc['difficulty'],
     );
   }
 
@@ -112,8 +127,22 @@ class _TaskListState extends State<TaskList> {
               : _buttonSheetButton(
                   label: "Task Completed",
                   onTap: () async => {
-                        DatabaseService(uid: user.uid).completeTask(id),
+                        await DatabaseService(uid: user.uid).completeTask(id, task.difficulty),
                         Get.back(),
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: const Text("Congratulations!"),
+                                  content: Text(
+                                      "You have completed a ${taskDifficultyList[task.difficulty!]} task! You have been rewarded ${reward[task.difficulty!]} food to feed your pet!"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                )),
                       },
                   color: Colors.blue,
                   context: context),

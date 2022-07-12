@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:location/location.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
 import '../../models/weather.dart';
 
@@ -36,7 +37,7 @@ class _WeatherPageState extends State<WeatherPage> {
         title: Text('Weather',
           style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        backgroundColor: Colors.red[200],
+        backgroundColor: appBarColor,
       ),
       body: Container(
         decoration: BoxDecoration(

@@ -73,7 +73,7 @@ class _PetHouseState extends State<PetHouse> {
               title: Center(
                 child: Text(name ?? 'Soccat!'),
               ),
-              backgroundColor: Colors.red[200],
+              backgroundColor: appBarColor,
               actions: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -240,9 +240,7 @@ class _PetHouseState extends State<PetHouse> {
                                           Text("Do not show this again"),
                                           Checkbox(
                                               checkColor: Colors.white,
-                                              fillColor: MaterialStateProperty
-                                                  .resolveWith(
-                                                      checkBoxMaterialState),
+                                              fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
                                               value: showPetMaxLevelDialog,
                                               onChanged: (bool? value) {
                                                 setState(() {

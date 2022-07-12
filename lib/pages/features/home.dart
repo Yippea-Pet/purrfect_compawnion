@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
 
+import '../../services/notification_services.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -10,6 +12,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+  var notifyHelper;
+
+  @override
+  void initState() {
+    super.initState();
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,14 +142,6 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-
-            // ElevatedButton(
-            //     onPressed: () async {
-            //       Weather weather = new Weather(location: 'Singapore', url: '??');
-            //       await weather.getWeather();
-            //     },
-            //     child: Text("TEST")
-            // ),
           ],
         ),
       ),

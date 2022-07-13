@@ -44,6 +44,7 @@ class AuthService {
       await DatabaseService(uid: user!.uid).updateFoodData(0, 100, 10);
       await DatabaseService(uid: user.uid).updatePetName("Soccat!");
       await DatabaseService(uid: user.uid).updateDeductHungerTime(DateTime.now());
+      await DatabaseService(uid: user.uid).doNotShowFriendshipLevelDialog(false);
       return _userFromFirebaseUser(user);
   }
 

@@ -10,8 +10,6 @@ class DatabaseService {
   // collection reference
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
-  final CollectionReference foodCollection =
-      FirebaseFirestore.instance.collection('food');
 
   Future updatePetData(int friendshipLevel, int hungerLevel) async {
     return await users.doc(uid).collection("pet").doc("levels").set({
@@ -54,6 +52,7 @@ class DatabaseService {
       "color": task?.color,
       "remind": task?.remind,
       "repeat": task?.repeat,
+      "difficulty": task?.difficulty,
     });
   }
 
@@ -61,9 +60,33 @@ class DatabaseService {
     return await users.doc(uid).collection("tasks").doc(id).delete();
   }
 
-  Future completeTask(String? id) async {
+  Future completeTask(String? id, int? difficulty) async {
+    await users.doc(uid).collection("pet").doc("food").update({
+      'foodQuantity': FieldValue.increment((difficulty ?? 0) + 1),
+    });
     return await users.doc(uid).collection("tasks").doc(id).update({
       "isCompleted": 1,
+    });
+  }
+
+  Future updateTask(String? id, Task task) async {
+    return await users.doc(uid).collection("tasks").doc(id).update({
+      "title": task.title,
+      "note": task.note,
+      "isCompleted": task.isCompleted,
+      "date": task.date,
+      "startTime": task.startTime,
+      "endTime": task.endTime,
+      "color": task.color,
+      "remind": task.remind,
+      "repeat": task.repeat,
+      "difficulty": task.difficulty,
+    });
+  }
+
+  Future doNotShowFriendshipLevelDialog(bool val) async {
+    return await users.doc(uid).collection("preference").doc("friendshipLevel").set({
+      "doNotShow": val,
     });
   }
 }

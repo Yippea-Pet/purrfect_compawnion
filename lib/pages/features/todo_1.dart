@@ -6,6 +6,7 @@ import 'package:purrfect_compawnion/pages/ui/widgets/button.dart';
 import 'package:purrfect_compawnion/services/notification_services.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:get/get.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
 import 'package:purrfect_compawnion/pages/features/task_list.dart';
 
@@ -16,7 +17,6 @@ class ToDo extends StatefulWidget {
 
 class _ToDoState extends State<ToDo> {
   DateTime _selectedDate = DateTime.now();
-  // final _taskController = Get.put(TaskController());
   var notifyHelper;
   bool loading = false;
 
@@ -26,9 +26,6 @@ class _ToDoState extends State<ToDo> {
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
-    setState(() {
-      print("I am here");
-    });
   }
 
   @override
@@ -118,7 +115,7 @@ class _ToDoState extends State<ToDo> {
   _appBar() {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.red[200],
+      backgroundColor: appBarColor,
       actions: [
         Padding(
           padding: const EdgeInsets.all(8.0),

@@ -1,40 +1,61 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:purrfect_compawnion/pages/ui/widgets/button.dart';
-import 'package:purrfect_compawnion/pages/ui/widgets/input_field.dart';
 import 'package:intl/intl.dart';
-import 'package:purrfect_compawnion/services/database.dart';
-import 'package:purrfect_compawnion/shared/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/myuser.dart';
 import '../../models/task.dart';
+import '../../services/database.dart';
+import '../../shared/constants.dart';
+import '../ui/widgets/button.dart';
+import '../ui/widgets/input_field.dart';
 
-class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({Key? key}) : super(key: key);
+class EditTask extends StatefulWidget {
+  final Task task;
+  final String id;
+
+  const EditTask({Key? key, required this.task, required this.id})
+      : super(key: key);
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<EditTask> createState() => _EditTaskState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
-  // final TaskController _taskController = Get.put(TaskController());
+class _EditTaskState extends State<EditTask> {
+  late Task task;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9:30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [5, 10, 15, 20];
-
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
   int _selectedDifficulty = 0;
+  late String taskId;
 
+  @override
+  void initState() {
+    task = widget.task;
+    _selectedDate = DateFormat('M/d/y').parse(task.date!);
+
+    _endTime = task.endTime!;
+    _startTime = task.startTime!;
+    _selectedRemind = task.remind!;
+    remindList = [5, 10, 15, 20];
+    _selectedRepeat = task.repeat!;
+    repeatList = ["None", "Daily", "Weekly", "Monthly"];
+    _selectedColor = task.color!;
+    _selectedDifficulty = task.difficulty!;
+    taskId = widget.id;
+    _titleController.text = task.title!;
+    _noteController.text = task.note!;
+  }
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
@@ -48,7 +69,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Add Task",
+                "Edit Task",
                 style: GoogleFonts.lato(
                   textStyle: TextStyle(
                       fontSize: 20,
@@ -188,36 +209,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         style: titleStyle,
                       ),
                       SizedBox(height: 6.0),
-                      Row(
-                        children: [
-                          Text("Easy"),
-                          Wrap(
-                            children: List<Widget>.generate(
-                                3,
-                                (index) => GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedDifficulty = index;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8.0),
-                                        child: Icon(
-                                          _selectedDifficulty == index
-                                              ? Icons.check_circle_outline
-                                              : Icons.circle_outlined,
-                                        ),
-                                      ),
-                                    )),
-                          ),
-                          Text("Hard"),
-                        ],
-                      ),
+                      _chooseDifficulty(),
                     ],
                   ),
                   MyButton(
-                      label: "Create Task", onTap: () => _validateDate(user))
+                      label: "Edit Task", onTap: () => _validateDate(user))
                 ],
               ),
               SizedBox(height: 20.0),
@@ -230,31 +226,31 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _validateDate(user) {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDb(user);
+      Task newTask = Task(
+        note: _noteController.text,
+        title: _titleController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0,
+        difficulty: _selectedDifficulty,
+      );
+      _updateTask(user, newTask, widget.id);
       Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar("Required", "All fields are required !",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.white,
-          icon: Icon(Icons.warning_amber_rounded));
+          icon: const Icon(Icons.warning_amber_rounded));
     }
   }
 
-  _addTaskToDb(user) async {
-    DatabaseService(uid: user.uid).addTask(new Task(
-      note: _noteController.text,
-      title: _titleController.text,
-      date: DateFormat.yMd().format(_selectedDate),
-      startTime: _startTime,
-      endTime: _endTime,
-      remind: _selectedRemind,
-      repeat: _selectedRepeat,
-      color: _selectedColor,
-      isCompleted: 0,
-      difficulty: _selectedDifficulty,
-    ));
+  _updateTask(user, task, id) {
+    DatabaseService(uid: user.uid).updateTask(id, task);
   }
-
   _appBar(BuildContext context) {
     return AppBar(
       elevation: 0,
@@ -278,7 +274,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ],
     );
   }
-
   _getDateFromUser() async {
     DateTime? _pickerDate = await showDatePicker(
         context: context,
@@ -295,7 +290,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       print("it's null or something is wrong");
     }
   }
-
   _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
     String _formatedTime = pickedTime.format(context);
@@ -311,7 +305,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       });
     }
   }
-
   _showTimePicker() {
     return showTimePicker(
         initialEntryMode: TimePickerEntryMode.input,
@@ -320,7 +313,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
             hour: int.parse(_startTime.split(":")[0]),
             minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
   }
-
   _colorPallete() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,6 +351,34 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     ),
                   )),
         )
+      ],
+    );
+  }
+  _chooseDifficulty() {
+    return Row(
+      children: [
+        Text("Easy"),
+        Wrap(
+          children: List<Widget>.generate(
+              3,
+                  (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedDifficulty = index;
+                  });
+                },
+                child: Padding(
+                  padding:
+                  const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    _selectedDifficulty == index
+                        ? Icons.check_circle_outline
+                        : Icons.circle_outlined,
+                  ),
+                ),
+              )),
+        ),
+        Text("Hard"),
       ],
     );
   }

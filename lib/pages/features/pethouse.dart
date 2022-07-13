@@ -26,7 +26,7 @@ class _PetHouseState extends State<PetHouse> {
   int friendshipLevel = 0;
   int foodQuantity = 0;
   String? name;
-  bool showPetMaxLevelDialog = false;
+  late bool doNotShowPetMaxLevelDialog;
   bool isChecked = false;
   bool loading = false;
   var db;
@@ -63,6 +63,12 @@ class _PetHouseState extends State<PetHouse> {
     petName.get().then((DocumentSnapshot doc) async {
       dynamic data = doc.data() as Map<String, dynamic>;
       name = data['name'];
+    });
+
+    var preference = db.collection("users").doc(user.uid).collection("preference").doc("friendshipLevel");
+    preference.get().then((DocumentSnapshot doc) async {
+      dynamic data = doc.data() as Map<String, dynamic>;
+      doNotShowPetMaxLevelDialog = data['doNotShow'] ?? false;
       setState(() {});
     });
 
@@ -73,7 +79,7 @@ class _PetHouseState extends State<PetHouse> {
               title: Center(
                 child: Text(name ?? 'Soccat!'),
               ),
-              backgroundColor: Colors.red[200],
+              backgroundColor: appBarColor,
               actions: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -180,10 +186,9 @@ class _PetHouseState extends State<PetHouse> {
                               petState = 1;
                               _isFeedButtonDisabled = true;
                             });
-                            scheduleResetSoccat(5250);
+                            scheduleResetSoccat(4900);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
-                            print(foodQuantity);
                           } else {
                             return showDialog(
                                 context: context,
@@ -225,8 +230,7 @@ class _PetHouseState extends State<PetHouse> {
                           });
                           await DatabaseService(uid: user.uid)
                               .updatePetData(friendshipLevel, hungerLevel);
-                          if (friendshipLevel >= 100 &&
-                              !showPetMaxLevelDialog) {
+                          if (friendshipLevel >= 100 && !doNotShowPetMaxLevelDialog) {
                             return showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>
@@ -240,15 +244,13 @@ class _PetHouseState extends State<PetHouse> {
                                           Text("Do not show this again"),
                                           Checkbox(
                                               checkColor: Colors.white,
-                                              fillColor: MaterialStateProperty
-                                                  .resolveWith(
-                                                      checkBoxMaterialState),
-                                              value: showPetMaxLevelDialog,
-                                              onChanged: (bool? value) {
+                                              fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
+                                              value: doNotShowPetMaxLevelDialog,
+                                              onChanged: (bool? value) async {
                                                 setState(() {
-                                                  showPetMaxLevelDialog =
-                                                      value ?? false;
+                                                  doNotShowPetMaxLevelDialog = value ?? false;
                                                 });
+                                                await DatabaseService(uid: user.uid).doNotShowFriendshipLevelDialog(doNotShowPetMaxLevelDialog);
                                               }),
                                           TextButton(
                                             onPressed: () =>
@@ -302,10 +304,6 @@ class _PetHouseState extends State<PetHouse> {
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
       await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
-    print("UPDATE TIME HERE!!!!");
-    print(lastDeductTime);
-    print(difference);
-
   }
 
   Timer scheduleTimeout([int seconds = 5]) => Timer(Duration(seconds: seconds), handleTimeout);
@@ -313,7 +311,6 @@ class _PetHouseState extends State<PetHouse> {
     // Do some work.
     updateTime();
     if (mounted) scheduleTimeout(5);
-    print("scheduleTimeout here!!!");
   }
 
   Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);

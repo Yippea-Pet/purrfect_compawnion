@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
@@ -21,16 +22,18 @@ class _WeatherPageState extends State<WeatherPage> {
   Weather? weather;
   final String APP_ID = '397ae723cbabc3756170e7a70b4c8869';
   Location location = Location();
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
     getWeather();
+    loading = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return weather == null
+    return loading
     ? Loading()
     : Scaffold(
       appBar: AppBar(
@@ -61,21 +64,21 @@ class _WeatherPageState extends State<WeatherPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text("Singapore",
+                      Text(weather!.country,
                         style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               fontSize: 40,
                               color: Colors.white),
                         ),
                       ),
-                      Text("Chinese Garden, Singapore",
+                      Text(weather!.city,
                         style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               fontSize: 20,
                               color: Colors.white),
                         ),
                       ),
-                      Text(" 31°",
+                      Text("${weather!.temp.roundToDouble()}°",
                         style: GoogleFonts.heebo(
                           textStyle: TextStyle(
                               fontSize: 90,
@@ -87,7 +90,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text("clear",
+                            Text(weather!.main,
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
                                     fontSize: 20,
@@ -96,7 +99,7 @@ class _WeatherPageState extends State<WeatherPage> {
                               ),
                             ),
                             SizedBox(width: 40,),
-                            Text("clear sky",
+                            Text(weather!.description,
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
                                     fontSize: 20,
@@ -119,7 +122,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text("H: 34°",
+                            Text("H: ${weather!.temp_max.roundToDouble()}°",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
                                     fontSize: 20,
@@ -128,7 +131,7 @@ class _WeatherPageState extends State<WeatherPage> {
                               ),
                             ),
                             SizedBox(width: 50,),
-                            Text("L: 29°",
+                            Text("L: ${weather!.temp_min.roundToDouble()}°",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
                                     fontSize: 20,
@@ -155,7 +158,15 @@ class _WeatherPageState extends State<WeatherPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text("sunrise time: 05 00",
+                            Text("sunrise time: ${DateFormat("HH:mm").format(weather!.sunrise)}",
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black54),
+                              ),
+                            ),
+                            Text("sunset time: ${DateFormat("HH:mm").format(weather!.sunset)}",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
                                     fontSize: 20,
@@ -209,20 +220,24 @@ class _WeatherPageState extends State<WeatherPage> {
       var sysData = jsonDecode(jsonEncode(data['sys']));
       print("sys");
 
-
-      setState(() => weather = Weather(
-        id: weatherData['id'],
-        main: weatherData['main'],
-        description: weatherData['description'],
-        icon: weatherData['icon'],
-        temp: mainData['temp'],
-        temp_min: mainData['temp_min'],
-        temp_max: mainData['temp_max'],
-        country: sysData['country'],
-        sunrise: DateTime.fromMillisecondsSinceEpoch(sysData['sunrise'] * 1000),
-        sunset: DateTime.fromMillisecondsSinceEpoch(sysData['sunset'] * 1000),
-        city: data['name'],
-      ));
+      // setState(() {
+        weather = Weather(
+          id: weatherData['id'],
+          main: weatherData['main'],
+          description: weatherData['description'],
+          icon: weatherData['icon'],
+          temp: mainData['temp'] - 273.15,
+          temp_min: mainData['temp_min'] - 273.15,
+          temp_max: mainData['temp_max'] - 273.15,
+          country: sysData['country'],
+          sunrise: DateTime.fromMillisecondsSinceEpoch(sysData['sunrise'] * 1000),
+          sunset: DateTime.fromMillisecondsSinceEpoch(sysData['sunset'] * 1000),
+          city: data['name'],
+        );
+        // print(loading);
+        // loading = false;
+      // });
+      setState(() => loading = false);
     } catch(e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e}")));
     }

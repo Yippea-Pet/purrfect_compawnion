@@ -17,10 +17,8 @@ class Weather extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
 
-            //BACKGROUND!!!!!!!!!!!!
 
-            //image: AssetImage("assets/rainbg.jpg"),
-            image: AssetImage("assets/sunnybg.jpg"),
+            image: AssetImage("assets/rainbg.jpg"),
           fit: BoxFit.cover,
           ),
         ),
@@ -61,21 +59,21 @@ class Weather extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                  Text("clear",
+                  Text("rain",
                     style: GoogleFonts.lato(
                       textStyle: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
-                          color: Colors.black54),
+                          color: Colors.white),
                     ),
                   ),
                   SizedBox(width: 40,),
-                  Text("clear sky",
+                  Text("light rain",
                     style: GoogleFonts.lato(
                       textStyle: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
-                          color: Colors.black54),
+                          color: Colors.white),
                     ),
                   ),
                 ]
@@ -98,7 +96,7 @@ class Weather extends StatelessWidget {
                             textStyle: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black54),
+                                color: Colors.white),
                           ),
                         ),
                         SizedBox(width: 50,),
@@ -107,7 +105,7 @@ class Weather extends StatelessWidget {
                             textStyle: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black54),
+                                color: Colors.white),
                           ),
                         ),
                       ]
@@ -120,8 +118,8 @@ class Weather extends StatelessWidget {
 
                   //SOCCAT ANIMATION !!!!!!!!!!!
 
-                  //child: Image.asset('assets/rainanimation.GIF')
-                  child: Image.asset('assets/sunanimation2.GIF')
+                  child: Image.asset('assets/rainanimation.GIF')
+                  // child: Image.asset('assets/sunanimation2.GIF')
               ),
               Expanded(
                 flex: 1,
@@ -134,7 +132,7 @@ class Weather extends StatelessWidget {
                           textStyle: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: Colors.black54),
+                              color: Colors.white),
                         ),
                       ),
                     ]

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/models/myuser.dart';
 import 'package:purrfect_compawnion/models/task.dart';
+import 'package:purrfect_compawnion/pages/features/edit_task.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
@@ -57,9 +58,10 @@ class _TaskListState extends State<TaskList> {
                   Task task = _taskFromDoc(doc);
                   if (task.repeat == "Daily" ||
                       task.date == DateFormat.yMd().format(_selectedDate)) {
-                    DateTime taskStart = DateFormat.jm().parse(task.startTime!);
+                    DateTime taskStart = DateFormat.jm().parse(task.startTime!).subtract(Duration(minutes: task.remind!));
                     var taskStartTime = DateFormat("HH:mm").format(taskStart);
                     notifyHelper.scheduledNotification(
+                      doc.id,
                       int.parse(taskStartTime.split(":")[0]),
                       int.parse(taskStartTime.split(":")[1]),
                       task,
@@ -146,6 +148,16 @@ class _TaskListState extends State<TaskList> {
                       },
                   color: Colors.blue,
                   context: context),
+          task.isCompleted == 1
+              ? Container()
+              : _buttonSheetButton(
+              label: "Edit Task",
+              onTap: () {
+                Get.back();
+                _editTaskPage(task);
+              },
+              color: Colors.pink,
+              context: context),
           _buttonSheetButton(
               label: "Delete Task",
               onTap: () async => {
@@ -193,5 +205,9 @@ class _TaskListState extends State<TaskList> {
         )),
       ),
     );
+  }
+  
+  _editTaskPage(task) {
+    return EditTask(task: task);
   }
 }

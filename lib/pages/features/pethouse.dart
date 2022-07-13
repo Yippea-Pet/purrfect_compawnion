@@ -189,7 +189,6 @@ class _PetHouseState extends State<PetHouse> {
                             scheduleResetSoccat(4900);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
-                            print(foodQuantity);
                           } else {
                             return showDialog(
                                 context: context,
@@ -305,10 +304,6 @@ class _PetHouseState extends State<PetHouse> {
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
       await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
-    print("UPDATE TIME HERE!!!!");
-    print(lastDeductTime);
-    print(difference);
-
   }
 
   Timer scheduleTimeout([int seconds = 5]) => Timer(Duration(seconds: seconds), handleTimeout);
@@ -316,7 +311,6 @@ class _PetHouseState extends State<PetHouse> {
     // Do some work.
     updateTime();
     if (mounted) scheduleTimeout(5);
-    print("scheduleTimeout here!!!");
   }
 
   Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);

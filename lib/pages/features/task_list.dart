@@ -58,7 +58,9 @@ class _TaskListState extends State<TaskList> {
                   Task task = _taskFromDoc(doc);
                   if (task.repeat == "Daily" ||
                       task.date == DateFormat.yMd().format(_selectedDate)) {
-                    DateTime taskStart = DateFormat.jm().parse(task.startTime!).subtract(Duration(minutes: task.remind!));
+                    DateTime taskStart = DateFormat.jm()
+                        .parse(task.startTime!)
+                        .subtract(Duration(minutes: task.remind!));
                     var taskStartTime = DateFormat("HH:mm").format(taskStart);
                     notifyHelper.scheduledNotification(
                       doc.id,
@@ -139,8 +141,7 @@ class _TaskListState extends State<TaskList> {
                                       "You have completed a ${taskDifficultyList[task.difficulty!]} task! You have been rewarded ${reward[task.difficulty!]} food to feed your pet!"),
                                   actions: <Widget>[
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'OK'),
+                                      onPressed: () => Navigator.pop(context, 'OK'),
                                       child: const Text("OK"),
                                     ),
                                   ],
@@ -151,13 +152,13 @@ class _TaskListState extends State<TaskList> {
           task.isCompleted == 1
               ? Container()
               : _buttonSheetButton(
-              label: "Edit Task",
-              onTap: () {
-                Get.back();
-                _editTaskPage(task);
-              },
-              color: Colors.pink,
-              context: context),
+                  label: "Edit Task",
+                  onTap: () async {
+                    Get.back();
+                    await Get.to(() => EditTask(task: task, id: id,));
+                  },
+                  color: Colors.pink,
+                  context: context),
           _buttonSheetButton(
               label: "Delete Task",
               onTap: () async => {
@@ -205,9 +206,5 @@ class _TaskListState extends State<TaskList> {
         )),
       ),
     );
-  }
-  
-  _editTaskPage(task) {
-    return EditTask(task: task);
   }
 }

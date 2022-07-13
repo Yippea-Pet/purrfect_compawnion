@@ -69,6 +69,21 @@ class DatabaseService {
     });
   }
 
+  Future updateTask(String? id, Task task) async {
+    return await users.doc(uid).collection("tasks").doc(id).update({
+      "title": task.title,
+      "note": task.note,
+      "isCompleted": task.isCompleted,
+      "date": task.date,
+      "startTime": task.startTime,
+      "endTime": task.endTime,
+      "color": task.color,
+      "remind": task.remind,
+      "repeat": task.repeat,
+      "difficulty": task.difficulty,
+    });
+  }
+
   Future doNotShowFriendshipLevelDialog(bool val) async {
     return await users.doc(uid).collection("preference").doc("friendshipLevel").set({
       "doNotShow": val,

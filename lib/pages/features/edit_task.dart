@@ -14,27 +14,48 @@ import '../ui/widgets/input_field.dart';
 
 class EditTask extends StatefulWidget {
   final Task task;
-  const EditTask({Key? key, required this.task}) : super(key: key);
+  final String id;
+
+  const EditTask({Key? key, required this.task, required this.id})
+      : super(key: key);
 
   @override
   State<EditTask> createState() => _EditTaskState();
 }
 
 class _EditTaskState extends State<EditTask> {
-  // final TaskController _taskController = Get.put(TaskController());
+  late Task task;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9:30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [5, 10, 15, 20];
-
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
   int _selectedDifficulty = 0;
+  late String taskId;
 
+  @override
+  void initState() {
+    task = widget.task;
+    _selectedDate = DateFormat('M/d/y').parse(task.date!);
+
+    _endTime = task.endTime!;
+    _startTime = task.startTime!;
+    _selectedRemind = task.remind!;
+    remindList = [5, 10, 15, 20];
+    _selectedRepeat = task.repeat!;
+    repeatList = ["None", "Daily", "Weekly", "Monthly"];
+    _selectedColor = task.color!;
+    _selectedDifficulty = task.difficulty!;
+    taskId = widget.id;
+    _titleController.text = task.title!;
+    _noteController.text = task.note!;
+  }
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
@@ -48,7 +69,7 @@ class _EditTaskState extends State<EditTask> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Add Task",
+                "Edit Task",
                 style: GoogleFonts.lato(
                   textStyle: TextStyle(
                       fontSize: 20,
@@ -87,7 +108,7 @@ class _EditTaskState extends State<EditTask> {
                           _getTimeFromUser(isStartTime: true);
                         },
                         icon:
-                        Icon(Icons.access_time_rounded, color: Colors.grey),
+                            Icon(Icons.access_time_rounded, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -103,7 +124,7 @@ class _EditTaskState extends State<EditTask> {
                           _getTimeFromUser(isStartTime: false);
                         },
                         icon:
-                        Icon(Icons.access_time_rounded, color: Colors.grey),
+                            Icon(Icons.access_time_rounded, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -161,7 +182,7 @@ class _EditTaskState extends State<EditTask> {
                     height: 0,
                   ),
                   items:
-                  repeatList.map<DropdownMenuItem<String>>((String? value) {
+                      repeatList.map<DropdownMenuItem<String>>((String? value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value!, style: TextStyle(color: Colors.grey)),
@@ -188,34 +209,11 @@ class _EditTaskState extends State<EditTask> {
                         style: titleStyle,
                       ),
                       SizedBox(height: 6.0),
-                      Row(
-                        children: [
-                          Text("Easy"),
-                          Wrap(
-                            children: List<Widget>.generate(
-                                3,
-                                    (index) => GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedDifficulty = index;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(
-                                      _selectedDifficulty == index ? Icons.check_circle_outline : Icons.circle_outlined,
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          Text("Hard"),
-                        ],
-                      ),
-
+                      _chooseDifficulty(),
                     ],
                   ),
                   MyButton(
-                      label: "Create Task", onTap: () => _validateDate(user))
+                      label: "Edit Task", onTap: () => _validateDate(user))
                 ],
               ),
               SizedBox(height: 20.0),
@@ -228,28 +226,30 @@ class _EditTaskState extends State<EditTask> {
 
   _validateDate(user) {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDb(user);
+      Task newTask = Task(
+        note: _noteController.text,
+        title: _titleController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0,
+        difficulty: _selectedDifficulty,
+      );
+      _updateTask(user, newTask, widget.id);
       Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar("Required", "All fields are required !",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.white,
-          icon: Icon(Icons.warning_amber_rounded));
+          icon: const Icon(Icons.warning_amber_rounded));
     }
   }
-  _addTaskToDb(user) async {
-    DatabaseService(uid: user.uid).addTask(new Task(
-      note: _noteController.text,
-      title: _titleController.text,
-      date: DateFormat.yMd().format(_selectedDate),
-      startTime: _startTime,
-      endTime: _endTime,
-      remind: _selectedRemind,
-      repeat: _selectedRepeat,
-      color: _selectedColor,
-      isCompleted: 0,
-      difficulty: _selectedDifficulty,
-    ));
+
+  _updateTask(user, task, id) {
+    DatabaseService(uid: user.uid).updateTask(id, task);
   }
   _appBar(BuildContext context) {
     return AppBar(
@@ -325,32 +325,60 @@ class _EditTaskState extends State<EditTask> {
         Wrap(
           children: List<Widget>.generate(
               3,
+              (index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedColor = index;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CircleAvatar(
+                        radius: 14,
+                        backgroundColor: index == 0
+                            ? taskColor1
+                            : index == 1
+                                ? taskColor2
+                                : taskColor3,
+                        child: _selectedColor == index
+                            ? Icon(
+                                Icons.done,
+                                color: Colors.white,
+                                size: 16.0,
+                              )
+                            : Container(),
+                      ),
+                    ),
+                  )),
+        )
+      ],
+    );
+  }
+  _chooseDifficulty() {
+    return Row(
+      children: [
+        Text("Easy"),
+        Wrap(
+          children: List<Widget>.generate(
+              3,
                   (index) => GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedColor = index;
+                    _selectedDifficulty = index;
                   });
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: index == 0
-                        ? taskColor1
-                        : index == 1
-                        ? taskColor2
-                        : taskColor3,
-                    child: _selectedColor == index
-                        ? Icon(
-                      Icons.done,
-                      color: Colors.white,
-                      size: 16.0,
-                    )
-                        : Container(),
+                  padding:
+                  const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    _selectedDifficulty == index
+                        ? Icons.check_circle_outline
+                        : Icons.circle_outlined,
                   ),
                 ),
               )),
-        )
+        ),
+        Text("Hard"),
       ],
     );
   }

@@ -194,24 +194,26 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           Wrap(
                             children: List<Widget>.generate(
                                 3,
-                                    (index) => GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedDifficulty = index;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(
-                                      _selectedDifficulty == index ? Icons.check_circle_outline : Icons.circle_outlined,
-                                    ),
-                                  ),
-                                )),
+                                (index) => GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedDifficulty = index;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
+                                        child: Icon(
+                                          _selectedDifficulty == index
+                                              ? Icons.check_circle_outline
+                                              : Icons.circle_outlined,
+                                        ),
+                                      ),
+                                    )),
                           ),
                           Text("Hard"),
                         ],
                       ),
-
                     ],
                   ),
                   MyButton(
@@ -237,6 +239,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           icon: Icon(Icons.warning_amber_rounded));
     }
   }
+
   _addTaskToDb(user) async {
     DatabaseService(uid: user.uid).addTask(new Task(
       note: _noteController.text,
@@ -251,6 +254,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       difficulty: _selectedDifficulty,
     ));
   }
+
   _appBar(BuildContext context) {
     return AppBar(
       elevation: 0,
@@ -274,6 +278,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ],
     );
   }
+
   _getDateFromUser() async {
     DateTime? _pickerDate = await showDatePicker(
         context: context,
@@ -290,6 +295,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       print("it's null or something is wrong");
     }
   }
+
   _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
     String _formatedTime = pickedTime.format(context);
@@ -305,6 +311,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       });
     }
   }
+
   _showTimePicker() {
     return showTimePicker(
         initialEntryMode: TimePickerEntryMode.input,
@@ -313,6 +320,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             hour: int.parse(_startTime.split(":")[0]),
             minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
   }
+
   _colorPallete() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

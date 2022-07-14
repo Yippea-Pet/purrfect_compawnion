@@ -12,6 +12,7 @@ import 'package:purrfect_compawnion/pages/features/weather_page.dart';
 import 'package:purrfect_compawnion/pages/features/todo_1.dart';
 import 'package:purrfect_compawnion/pages/wrapper.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
+import 'package:purrfect_compawnion/shared/loading.dart';
 
 import 'models/myuser.dart';
 void main() async {
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => Home(),
           '/pethouse': (context) => PetHouse(),
           '/todo': (context) => ToDo(),
-          '/weather': (context) => WeatherPage()
+          '/weather': (context) => WeatherPage(),
+          '/loading': (context) => Loading(),
         },
       ),
     );

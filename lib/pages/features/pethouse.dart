@@ -11,6 +11,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
 import '../../models/myuser.dart';
+import '../../services/notification_services.dart';
 
 class PetHouse extends StatefulWidget {
   const PetHouse({Key? key}) : super(key: key);
@@ -35,6 +36,8 @@ class _PetHouseState extends State<PetHouse> {
   bool _isFeedButtonDisabled = false;
   int petState = 0; // 0(default):sleeping, 1: eating, 2: playing
 
+  var notifyHelper;
+
   @override
   initState() {
     super.initState();
@@ -45,6 +48,9 @@ class _PetHouseState extends State<PetHouse> {
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
     db = FirebaseFirestore.instance;
+
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
 
     var petLevel = db.collection("users").doc(user.uid).collection("pet").doc("levels");
     petLevel.get().then((DocumentSnapshot doc) async {
@@ -293,24 +299,24 @@ class _PetHouseState extends State<PetHouse> {
       dynamic data = doc.data() as Map<String, dynamic>;
       lastDeductTime = data['time'].toDate();
     });
-    // final difference = lastDeductTime.difference(DateTime.now()).inHours;
-    // final difference = DateTime.now().difference(lastDeductTime).inMinutes;
-    final difference = DateTime.now().difference(lastDeductTime).inSeconds;
-    if (difference >= 5) {
-      // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
+    final difference = lastDeductTime.difference(DateTime.now()).inHours;
+    // final difference = DateTime.now().difference(lastDeductTime).inSeconds;
+    if (difference >= 1) {
+      await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
-      setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
-      final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
+      // setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
+      // final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
+      final finalHungerLevel = max(0, hungerLevel - difference);
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
       await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
   }
 
-  Timer scheduleTimeout([int seconds = 5]) => Timer(Duration(seconds: seconds), handleTimeout);
+  Timer scheduleTimeout([int hours = 1]) => Timer(Duration(hours: hours), handleTimeout);
   Future<void> handleTimeout() async {  // callback function
     // Do some work.
     updateTime();
-    if (mounted) scheduleTimeout(5);
+    if (mounted) scheduleTimeout(1);
   }
 
   Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);
@@ -320,5 +326,9 @@ class _PetHouseState extends State<PetHouse> {
       petState = 0;
       _isFeedButtonDisabled = false;
     });
+  }
+
+  void scheduleNotifyHungry() {
+    notifyHelper.scheduledHungryNotification();
   }
 }

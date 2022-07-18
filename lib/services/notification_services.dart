@@ -11,7 +11,7 @@ import '../models/task.dart';
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin(); //
+      FlutterLocalNotificationsPlugin();
 
   initializeNotification() async {
     _configureLocalTimezone();
@@ -70,6 +70,22 @@ class NotifyHelper {
         matchDateTimeComponents: DateTimeComponents.time,
         payload: "${task.title}|${task.note}",
     );
+  }
+
+  scheduledHungryNotification() async {
+    await flutterLocalNotificationsPlugin.cancel(0);
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        "Warning!", "Your pet is starving!",
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name',
+                importance: Importance.max,
+                priority: Priority.high,
+                icon: 'appicon')),
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true);
   }
 
   tz.TZDateTime _convertTime(int hour, int minutes) {

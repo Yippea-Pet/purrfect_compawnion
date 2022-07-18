@@ -33,6 +33,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(weather!.main);
     return loading
     ? Loading()
     : Scaffold(
@@ -47,9 +48,15 @@ class _WeatherPageState extends State<WeatherPage> {
           image: DecorationImage(
 
             //BACKGROUND!!!!!!!!!!!!
-
             //image: AssetImage("assets/rainbg.jpg"),
-            image: AssetImage("assets/sunnybg.jpg"),
+            image:
+            weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                ? AssetImage("assets/cloudy.jpg")
+                : weather!.main == "Clear"
+                ? AssetImage("assets/sunnybg.jpg")
+                : weather!.main == "Snow"
+                ? AssetImage("assets/snowybg.jpg")
+                : AssetImage("assets/rainbg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -68,14 +75,19 @@ class _WeatherPageState extends State<WeatherPage> {
                         style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               fontSize: 40,
-                              color: Colors.white),
+                              color:
+                              weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                  ? Colors.black54
+                                  : Colors.white),
                         ),
                       ),
                       Text(weather!.city,
                         style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               fontSize: 20,
-                              color: Colors.white),
+                              color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                  ? Colors.black54
+                                  : Colors.white),
                         ),
                       ),
                       Text("${weather!.temp.roundToDouble()}°",
@@ -83,7 +95,9 @@ class _WeatherPageState extends State<WeatherPage> {
                           textStyle: TextStyle(
                               fontSize: 90,
                               fontWeight: FontWeight.w200,
-                              color: Colors.white),
+                              color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                  ? Colors.black54
+                                  : Colors.white),
                         ),
                       ),
                       Row(
@@ -95,7 +109,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                    ? Colors.white
+                                    : Colors.black54),
                               ),
                             ),
                             SizedBox(width: 40,),
@@ -104,7 +121,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                        ? Colors.white
+                                        : Colors.black54),
                               ),
                             ),
                           ]
@@ -127,7 +147,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                        ? Colors.white
+                                        : Colors.black54),
                               ),
                             ),
                             SizedBox(width: 50,),
@@ -136,7 +159,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                        ? Colors.white
+                                        : Colors.black54),
                               ),
                             ),
                           ]
@@ -150,7 +176,15 @@ class _WeatherPageState extends State<WeatherPage> {
                       //SOCCAT ANIMATION !!!!!!!!!!!
 
                       //child: Image.asset('assets/rainanimation.GIF')
-                      child: Image.asset('assets/sunanimation2.GIF')
+                      child:
+                      weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                          ? Image.asset('assets/masksoccat.GIF')
+                          : weather!.main == "Clear"
+                          ? Image.asset('assets/sunanimation2.GIF')
+                          : weather!.main == "Snow"
+                          ? Image.asset('assets/snowsoccat.GIF')
+                          : Image.asset('assets/rainanimation2.GIF')
+
                   ),
                   Expanded(
                       flex: 1,
@@ -163,7 +197,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                        ? Colors.white
+                                        : Colors.black54),
                               ),
                             ),
                             Text("sunset time: ${DateFormat("HH:mm").format(weather!.sunset)}",
@@ -171,7 +208,10 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textStyle: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black54),
+                                    color:
+                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                        ? Colors.white
+                                        : Colors.black54),
                               ),
                             ),
                           ]

@@ -33,7 +33,6 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(weather!.main);
     return loading
     ? Loading()
     : Scaffold(
@@ -244,7 +243,6 @@ class _WeatherPageState extends State<WeatherPage> {
         return;
       }
     }
-
     _locationData = await location.getLocation();
   }
   Future getWeather() async {
@@ -254,13 +252,8 @@ class _WeatherPageState extends State<WeatherPage> {
       Map data = jsonDecode(response.body);
 
       var weatherData = jsonDecode(jsonEncode(data['weather'][0]));
-      print("weatherData");
       var mainData = jsonDecode(jsonEncode(data['main']));
-      print("main");
       var sysData = jsonDecode(jsonEncode(data['sys']));
-      print("sys");
-
-      // setState(() {
         weather = Weather(
           id: weatherData['id'],
           main: weatherData['main'],
@@ -274,9 +267,7 @@ class _WeatherPageState extends State<WeatherPage> {
           sunset: DateTime.fromMillisecondsSinceEpoch(sysData['sunset'] * 1000),
           city: data['name'],
         );
-        // print(loading);
-        // loading = false;
-      // });
+
       setState(() => loading = false);
     } catch(e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e}")));

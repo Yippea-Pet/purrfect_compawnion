@@ -38,6 +38,9 @@ class TaskTile extends StatelessWidget {
                 SizedBox(
                   height: 12,
                 ),
+                Text(
+                  "${task!.date}",
+                  style: taskTimeStyle.copyWith(letterSpacing: 2.0),),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

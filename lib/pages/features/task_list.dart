@@ -10,7 +10,6 @@ import 'package:purrfect_compawnion/models/task.dart';
 import 'package:purrfect_compawnion/pages/features/edit_task.dart';
 import 'package:purrfect_compawnion/services/database.dart';
 import 'package:purrfect_compawnion/shared/constants.dart';
-import 'package:purrfect_compawnion/shared/loading.dart';
 import '../../services/notification_services.dart';
 import '../ui/widgets/task_tile.dart';
 
@@ -48,7 +47,7 @@ class _TaskListState extends State<TaskList> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
-          return Loading();
+          return Container();
         else {
           return Expanded(
             child: ListView.builder(
@@ -56,18 +55,16 @@ class _TaskListState extends State<TaskList> {
                 itemBuilder: (context, index) {
                   final doc = snapshot.data!.docs[index];
                   Task task = _taskFromDoc(doc);
+                  var taskEnd = task.getEndTime();
+
                   if (task.repeat == "Daily" ||
-                      task.date == DateFormat.yMd().format(_selectedDate)) {
-                    DateTime taskStart = DateFormat.jm()
-                        .parse(task.startTime!)
-                        .subtract(Duration(minutes: task.remind!));
-                    var taskStartTime = DateFormat("HH:mm").format(taskStart);
-                    notifyHelper.scheduledNotification(
-                      doc.id,
-                      int.parse(taskStartTime.split(":")[0]),
-                      int.parse(taskStartTime.split(":")[1]),
-                      task,
-                    );
+                      task.date == DateFormat.yMd().format(_selectedDate)|| taskEnd.isBefore(DateTime.now())) {
+                    // notifyHelper.scheduledNotification(
+                    //   doc.id,
+                    //   int.parse(taskRemind.split(":")[0]),
+                    //   int.parse(taskRemind.split(":")[1]),
+                    //   task,
+                    // );
                     return AnimationConfiguration.staggeredList(
                         position: index,
                         child: SlideAnimation(

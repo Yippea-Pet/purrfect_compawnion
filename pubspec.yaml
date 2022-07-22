@@ -57,6 +57,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   firebase_messaging: ^11.4.4
   overlay_support: ^2.0.1
+  country_codes: ^2.2.0
 
 dev_dependencies:
   flutter_test:

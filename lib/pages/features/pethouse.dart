@@ -41,7 +41,10 @@ class _PetHouseState extends State<PetHouse> {
   @override
   initState() {
     super.initState();
-    scheduleTimeout(1);
+    scheduleTimeout(0);
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
+    scheduleNotifyHungry();
   }
 
   @override
@@ -49,14 +52,12 @@ class _PetHouseState extends State<PetHouse> {
     final user = Provider.of<MyUser>(context);
     db = FirebaseFirestore.instance;
 
-    notifyHelper = NotifyHelper();
-    notifyHelper.initializeNotification();
-
     var petLevel = db.collection("users").doc(user.uid).collection("pet").doc("levels");
     petLevel.get().then((DocumentSnapshot doc) async {
       dynamic data = doc.data() as Map<String, dynamic>;
       hungerLevel = data['hungerLevel'];
       friendshipLevel = data['friendshipLevel'];
+      scheduleNotifyHungry();
     });
 
     var foodData = db.collection("users").doc(user.uid).collection("pet").doc("food");
@@ -212,7 +213,11 @@ class _PetHouseState extends State<PetHouse> {
                                     ));
                           }
                         },
-                        child: Icon(Icons.food_bank),
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset('assets/FeedButton.png')
+                        ),
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(CircleBorder()),
                           padding:
@@ -268,7 +273,11 @@ class _PetHouseState extends State<PetHouse> {
                                     }));
                           }
                         },
-                        child: Icon(Icons.videogame_asset),
+                        child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: Image.asset('assets/PlayButton.png')
+                        ),
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(CircleBorder()),
                           padding:
@@ -313,8 +322,7 @@ class _PetHouseState extends State<PetHouse> {
   }
 
   Timer scheduleTimeout([int hours = 1]) => Timer(Duration(hours: hours), handleTimeout);
-  Future<void> handleTimeout() async {  // callback function
-    // Do some work.
+  Future<void> handleTimeout() async {
     updateTime();
     if (mounted) scheduleTimeout(1);
   }
@@ -329,6 +337,7 @@ class _PetHouseState extends State<PetHouse> {
   }
 
   void scheduleNotifyHungry() {
-    notifyHelper.scheduledHungryNotification();
+    int hungryHour = hungerLevel;
+    notifyHelper.scheduledHungryNotification(hungryHour);
   }
 }

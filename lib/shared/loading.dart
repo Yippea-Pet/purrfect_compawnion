@@ -24,13 +24,6 @@ class Loading extends StatelessWidget {
               child: Image.asset('assets/sleepingsoccat.GIF')
           ),
         ]
-      // child: Center(
-      //   child: SpinKitThreeInOut(
-      //     color: Colors.brown,
-      //     size: 50.0,
-      //   ),
-      // ),
-
         )
       )
     );

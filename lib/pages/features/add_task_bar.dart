@@ -12,6 +12,7 @@ import 'package:purrfect_compawnion/shared/constants.dart';
 
 import '../../models/myuser.dart';
 import '../../models/task.dart';
+import '../../services/notification_services.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -34,10 +35,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
   int _selectedDifficulty = 0;
+  var notifyHelper;
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
 
     return Scaffold(
       appBar: _appBar(context),
@@ -241,7 +245,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   _addTaskToDb(user) async {
-    DatabaseService(uid: user.uid).addTask(new Task(
+    Task newTask = new Task(
       note: _noteController.text,
       title: _titleController.text,
       date: DateFormat.yMd().format(_selectedDate),
@@ -252,7 +256,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
       color: _selectedColor,
       isCompleted: 0,
       difficulty: _selectedDifficulty,
-    ));
+    );
+    String id = await DatabaseService(uid: user.uid).addTask(newTask);
+    notifyHelper.scheduledNotification(id, newTask);
   }
 
   _appBar(BuildContext context) {

@@ -3,6 +3,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:purrfect_compawnion/pages/features/pethouse.dart';
+import 'package:purrfect_compawnion/pages/features/todo_1.dart';
 import 'package:purrfect_compawnion/pages/ui/notified_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -52,13 +54,12 @@ class NotifyHelper {
     );
   }
 
-  scheduledNotification(String id, int hour, int minutes, Task task) async {
+  scheduledNotification(String id, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id.hashCode,
         task.title,
         task.note,
-        _convertTime(hour, minutes),
-        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        _convertTime(task),
         const NotificationDetails(
             android: AndroidNotificationDetails(
                 'your channel id', 'your channel name',
@@ -72,12 +73,13 @@ class NotifyHelper {
     );
   }
 
-  scheduledHungryNotification() async {
+  scheduledHungryNotification(int hour) async {
     await flutterLocalNotificationsPlugin.cancel(0);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        "Warning!", "Your pet is starving!",
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        "Warning!",
+        "Your pet is starving!",
+        tz.TZDateTime.now(tz.local).add(Duration(hours: hour)),
         const NotificationDetails(
             android: AndroidNotificationDetails(
                 'your channel id', 'your channel name',
@@ -88,14 +90,16 @@ class NotifyHelper {
         androidAllowWhileIdle: true);
   }
 
-  tz.TZDateTime _convertTime(int hour, int minutes) {
+  tz.TZDateTime _convertTime(Task task) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduleDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
-    if (scheduleDate.isBefore(now)) {
-      scheduleDate = scheduleDate.add(const Duration(days: 1));
+    print(task.title);
+    print(task.getRemindTime());
+    tz.TZDateTime test = tz.TZDateTime.from(task.getRemindTime(), tz.local);
+    if (test.isBefore(now)) {
+      test = now.add(Duration(seconds: 5));
     }
-    return scheduleDate;
+
+    return test;
   }
 
   _configureLocalTimezone() async {
@@ -122,9 +126,11 @@ class NotifyHelper {
       print("Notification Done");
     }
     if (payload=="Feed your pet!") {
-      // TODO: Hunger level drops below wxx level notification
+      // TODO: Hunger level drops below xx level notification
+      Get.to(() => PetHouse());
     } else {
-      Get.to(() => NotifiedPage(label: payload ?? ""));
+      Get.to(() => ToDo());
+      // Get.to(() => NotifiedPage(label: payload ?? ""));
     }
   }
 

@@ -41,8 +41,8 @@ class DatabaseService {
     });
   }
 
-  Future addTask(Task? task) async {
-    return await users.doc(uid).collection("tasks").add({
+  Future<String> addTask(Task? task) async {
+    DocumentReference docRef = await users.doc(uid).collection("tasks").add({
       "title": task?.title,
       "note": task?.note,
       "isCompleted": task?.isCompleted,
@@ -54,6 +54,7 @@ class DatabaseService {
       "repeat": task?.repeat,
       "difficulty": task?.difficulty,
     });
+    return docRef.id;
   }
 
   Future deleteTask(String? id) async {

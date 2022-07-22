@@ -25,6 +25,10 @@ class Task {
     this.difficulty,
   });
 
+  DateTime getDate() {
+    return DateFormat('MM/dd/yyyy').parse(date!);
+  }
+
   DateTime getRemindTime() {
     DateTime taskStart = DateFormat.jm().parse(startTime!);
     DateTime taskRemind = DateFormat('MM/dd/yyyy')

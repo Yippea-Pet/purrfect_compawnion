@@ -51,15 +51,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Add Task",
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ),
+
               MyInputField(
                 title: "Title",
                 hint: "Enter your title",
@@ -264,24 +256,26 @@ class _AddTaskPageState extends State<AddTaskPage> {
   _appBar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: appBarColor,
+      centerTitle: true,
       leading: GestureDetector(
         onTap: () {
           Get.back();
         },
-        child: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
+        child: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: CircleAvatar(
-              backgroundImage: AssetImage("assets/emptyprofile.png"),
-            ),
-          ),
-        )
-      ],
+      title: Text("Add Task"),
+      // actions: [
+      //   Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: AspectRatio(
+      //       aspectRatio: 1,
+      //       child: CircleAvatar(
+      //         backgroundImage: AssetImage("assets/emptyprofile.png"),
+      //       ),
+      //     ),
+      //   )
+      // ],
     );
   }
 

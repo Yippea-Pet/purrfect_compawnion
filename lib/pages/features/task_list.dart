@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:purrfect_compawnion/models/myuser.dart';
 import 'package:purrfect_compawnion/models/task.dart';
@@ -57,14 +56,13 @@ class _TaskListState extends State<TaskList> {
                   Task task = _taskFromDoc(doc);
                   var taskEnd = task.getEndTime();
 
-                  if (task.repeat == "Daily" ||
-                      task.date == DateFormat.yMd().format(_selectedDate)|| taskEnd.isBefore(DateTime.now())) {
-                    // notifyHelper.scheduledNotification(
-                    //   doc.id,
-                    //   int.parse(taskRemind.split(":")[0]),
-                    //   int.parse(taskRemind.split(":")[1]),
-                    //   task,
-                    // );
+                  if (task.repeat == "None" ||
+                      task.repeat == "Daily" ||
+                      task.getDate() == _selectedDate ||
+                      taskEnd.isBefore(DateTime.now()) ||
+                      (task.repeat == "Weekly" && task.getDate().weekday == _selectedDate.weekday) ||
+                      (task.repeat == "Monthly" && task.getDate().day == _selectedDate.day)
+                  ) {
                     return AnimationConfiguration.staggeredList(
                         position: index,
                         child: SlideAnimation(
@@ -152,15 +150,16 @@ class _TaskListState extends State<TaskList> {
                   label: "Edit Task",
                   onTap: () async {
                     Get.back();
-                    await Get.to(() => EditTask(task: task, id: id,));
+                    await Get.to(() => EditTask(task: task, id: id));
                   },
                   color: Colors.pink,
                   context: context),
           _buttonSheetButton(
               label: "Delete Task",
-              onTap: () async => {
-                    DatabaseService(uid: user.uid).deleteTask(id),
-                    Get.back(),
+              onTap: () async {
+                    await DatabaseService(uid: user.uid).deleteTask(id);
+                    await notifyHelper.editScheduledNotification(id, null);
+                    Get.back();
                   },
               color: Colors.red,
               context: context),

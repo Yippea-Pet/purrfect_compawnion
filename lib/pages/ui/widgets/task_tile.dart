@@ -38,23 +38,25 @@ class TaskTile extends StatelessWidget {
                 SizedBox(
                   height: 12,
                 ),
-                Text(
-                  "${task!.date}",
-                  style: taskTimeStyle.copyWith(letterSpacing: 2.0),),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
+                    task!.getEndTime().isBefore(DateTime.now())
+                    ? SizedBox(height: 18, width: 18, child: Image.asset("assets/overdue_task.png"))
+                    : Icon(
                       Icons.access_time_rounded,
                       color: taskTileFontColor,
                       size: 18,
                     ),
                     SizedBox(width: 4),
                     Text(
-                      "${task!.startTime} - ${task!.endTime}",
-                      style: taskTimeStyle,
-                    ),
+                      "${task!.date}",
+                      style: taskTimeStyle.copyWith(letterSpacing: 2.0),),
                   ],
+                ),
+                Text(
+                  "${task!.startTime} - ${task!.endTime}",
+                  style: taskTimeStyle,
                 ),
                 SizedBox(height: 12),
                 Text(

@@ -73,6 +73,13 @@ class NotifyHelper {
     );
   }
 
+  editScheduledNotification(String id, Task? task) async {
+    await flutterLocalNotificationsPlugin.cancel(id.hashCode);
+    if (task != null) {
+      scheduledNotification(id, task);
+    }
+  }
+
   scheduledHungryNotification(int hour) async {
     await flutterLocalNotificationsPlugin.cancel(0);
     await flutterLocalNotificationsPlugin.zonedSchedule(

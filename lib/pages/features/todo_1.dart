@@ -71,6 +71,7 @@ class _ToDoState extends State<ToDo> {
         ),
         onDateChange: (date) {
           setState(() => _selectedDate = date);
+          setState(() {});
         },
       ),
     );
@@ -116,21 +117,10 @@ class _ToDoState extends State<ToDo> {
     return AppBar(
       elevation: 0,
       backgroundColor: appBarColor,
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: CircleAvatar(
-              backgroundImage: AssetImage("assets/emptyprofile.png"),
-            ),
-          ),
-        )
-      ],
     );
   }
   _buildTaskList() {
-    return TaskList(selectedDate: _selectedDate,);
+    return TaskList(selectedDate: _selectedDate);
   }
 
 }

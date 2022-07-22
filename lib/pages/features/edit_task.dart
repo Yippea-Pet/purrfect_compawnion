@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../models/myuser.dart';
 import '../../models/task.dart';
 import '../../services/database.dart';
+import '../../services/notification_services.dart';
 import '../../shared/constants.dart';
 import '../ui/widgets/button.dart';
 import '../ui/widgets/input_field.dart';
@@ -38,6 +39,7 @@ class _EditTaskState extends State<EditTask> {
   int _selectedColor = 0;
   int _selectedDifficulty = 0;
   late String taskId;
+  var notifyHelper;
 
   @override
   void initState() {
@@ -59,6 +61,8 @@ class _EditTaskState extends State<EditTask> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
+    notifyHelper = NotifyHelper();
+    notifyHelper.initializeNotification();
 
     return Scaffold(
       appBar: _appBar(context),
@@ -248,8 +252,9 @@ class _EditTaskState extends State<EditTask> {
     }
   }
 
-  _updateTask(user, task, id) {
-    DatabaseService(uid: user.uid).updateTask(id, task);
+  _updateTask(user, task, id) async {
+    await DatabaseService(uid: user.uid).updateTask(id, task);
+    await notifyHelper.editScheduledNotification(id, task);
   }
   _appBar(BuildContext context) {
     return AppBar(

@@ -173,7 +173,7 @@ class _PetHouseState extends State<PetHouse> {
                         ? Image.asset('assets/SoccatSleep.PNG')
                         : petState == 1
                             ? Image.asset('assets/SoccatNomming.GIF')
-                            : Image.asset('assets/MovingSoccat.GIF'),
+                            : Image.asset('assets/playingsoccat.GIF'),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -239,6 +239,7 @@ class _PetHouseState extends State<PetHouse> {
                             friendshipLevel = min(friendshipLevel + 1, 100);
                             petState = 2;
                           });
+                          scheduleResetSoccat(4000);
                           await DatabaseService(uid: user.uid)
                               .updatePetData(friendshipLevel, hungerLevel);
                           if (friendshipLevel >= 100 && !doNotShowPetMaxLevelDialog) {

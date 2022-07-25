@@ -94,7 +94,9 @@ class NotifyHelper {
                   priority: Priority.high,
                   icon: 'appicon')),
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-          androidAllowWhileIdle: true);
+          androidAllowWhileIdle: true,
+          payload: "Feed your pet!",
+      );
     } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           0,
@@ -108,7 +110,9 @@ class NotifyHelper {
                   priority: Priority.high,
                   icon: 'appicon')),
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-          androidAllowWhileIdle: true);
+          androidAllowWhileIdle: true,
+          payload: "Feed your pet!",
+      );
     }
   }
 

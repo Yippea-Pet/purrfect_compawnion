@@ -265,11 +265,8 @@ class _WeatherPageState extends State<WeatherPage> {
       print('https://api.openweathermap.org/data/2.5/weather?lat=${_locationData.latitude}&lon=${_locationData.longitude}&appid=${APP_ID}');
 
       // To get country name
-      print(1);
       CountryDetails myLocale = CountryCodes.detailsForLocale();
-      print(1);
       var weatherData = jsonDecode(jsonEncode(data['weather'][0]));
-      print(2);
       var mainData = jsonDecode(jsonEncode(data['main']));
       var sysData = jsonDecode(jsonEncode(data['sys']));
         weather = Weather(

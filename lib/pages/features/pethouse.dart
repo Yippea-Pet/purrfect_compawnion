@@ -76,7 +76,6 @@ class _PetHouseState extends State<PetHouse> {
     preference.get().then((DocumentSnapshot doc) async {
       dynamic data = doc.data() as Map<String, dynamic>;
       doNotShowPetMaxLevelDialog = data['doNotShow'] ?? false;
-      setState(() {});
     });
 
     return loading
@@ -161,7 +160,7 @@ class _PetHouseState extends State<PetHouse> {
                               width: 40,
                               height: 40,
                             ),
-                            Text(" : ${foodQuantity}"),
+                            Text(" : ${foodQuantity}   "),
                           ],
                         ),
                       ),
@@ -187,15 +186,16 @@ class _PetHouseState extends State<PetHouse> {
                               SnackBar(content: Text("I need some time to chew! ><")),
                             );
                           } else if (foodQuantity > 0) {
-                            setState(() {
+                            // setState(() {
                               foodQuantity -= 1;
                               hungerLevel += 1;
                               petState = 1;
                               _isFeedButtonDisabled = true;
-                            });
+                            // });
                             scheduleResetSoccat(4900);
                             await DatabaseService(uid: user.uid).updateFoodData(
                                 friendshipLevel, hungerLevel, foodQuantity);
+                              if (mounted) setState(() {});
                           } else {
                             return showDialog(
                                 context: context,
@@ -308,12 +308,11 @@ class _PetHouseState extends State<PetHouse> {
       dynamic data = doc.data() as Map<String, dynamic>;
       lastDeductTime = data['time'].toDate();
     });
-    final difference = lastDeductTime.difference(DateTime.now()).inHours;
-    // final difference = DateTime.now().difference(lastDeductTime).inSeconds;
+    final difference = DateTime.now().difference(lastDeductTime).inHours;
     if (difference >= 1) {
-      await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
+      // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
-      // setState(() => lastDeductTime = lastDeductTime.add(Duration(seconds: difference)));
+      setState(() => lastDeductTime = lastDeductTime.add(Duration(hours: difference)));
       // final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
       final finalHungerLevel = max(0, hungerLevel - difference);
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
@@ -321,7 +320,7 @@ class _PetHouseState extends State<PetHouse> {
     }
   }
 
-  Timer scheduleTimeout([int hours = 1]) => Timer(Duration(hours: hours), handleTimeout);
+  Timer scheduleTimeout([int hour = 1]) => Timer(Duration(hours: hour), handleTimeout);
   Future<void> handleTimeout() async {
     updateTime();
     if (mounted) scheduleTimeout(1);
@@ -330,14 +329,15 @@ class _PetHouseState extends State<PetHouse> {
   Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);
 
   Future<void> resetSoccat() async {
-    setState(() {
       petState = 0;
       _isFeedButtonDisabled = false;
-    });
+      if (mounted) setState(() {});
   }
 
   void scheduleNotifyHungry() {
-    int hungryHour = hungerLevel;
+    // Remind if drop belows 20
+    int hungryHour = max(hungerLevel - 20, 0);
     notifyHelper.scheduledHungryNotification(hungryHour);
+    if (mounted) setState(() {});
   }
 }

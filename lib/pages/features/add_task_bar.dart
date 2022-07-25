@@ -51,7 +51,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               MyInputField(
                 title: "Title",
                 hint: "Enter your title",
@@ -265,17 +264,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         child: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
       ),
       title: Text("Add Task"),
-      // actions: [
-      //   Padding(
-      //     padding: const EdgeInsets.all(8.0),
-      //     child: AspectRatio(
-      //       aspectRatio: 1,
-      //       child: CircleAvatar(
-      //         backgroundImage: AssetImage("assets/emptyprofile.png"),
-      //       ),
-      //     ),
-      //   )
-      // ],
     );
   }
 

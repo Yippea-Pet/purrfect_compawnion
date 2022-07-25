@@ -66,6 +66,19 @@ TextStyle get taskNoteStyle {
   );
 }
 
+final homeButtonStyle = ButtonStyle(
+  shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        side: BorderSide(
+          color: Colors.pinkAccent,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(30.0),
+      )),
+  backgroundColor: MaterialStateProperty.all(Colors.pink[50]),
+);
+
+
 const taskColor3 = Color(0xFFF197CC);
 const taskColor2 = Color(0xFFFFACBC);
 const taskColor1 = Color(0xFFFEC4B0);

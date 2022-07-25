@@ -48,7 +48,6 @@ dependencies:
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
 
-  sqflite:
 
   path:
   percent_indicator: ^4.2.2
@@ -58,6 +57,17 @@ dependencies:
   firebase_messaging: ^11.4.4
   overlay_support: ^2.0.1
   country_codes: ^2.2.0
+  flutter_launcher_icons: ^0.9.3
+
+flutter_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/IconSoccat.PNG"
+  image_path_ios: "assets/IconSoccat.PNG"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+#  adaptive_icon_background: "assets/images/christmas-background.png" # only available for Android 8.0 devices and above
+#  adaptive_icon_foreground: "assets/images/icon-foreground-432x432.png" # only available for Android 8.0 devices and above
+
 
 dev_dependencies:
   flutter_test:

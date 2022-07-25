@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:purrfect_compawnion/services/auth.dart';
+import 'package:purrfect_compawnion/shared/constants.dart';
 
 import '../../services/notification_services.dart';
 
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[50],
+      backgroundColor: Colors.brown[50],
       appBar: AppBar(
         backgroundColor: Colors.red[200],
         actions: <Widget>[
@@ -71,13 +72,7 @@ class _HomeState extends State<Home> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/pethouse');
                           },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                )),
-                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
-                          ),
+                          style: homeButtonStyle,
                           child: Text(
                             'Pet House',
                             style: TextStyle(
@@ -96,13 +91,7 @@ class _HomeState extends State<Home> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/todo');
                           },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                )),
-                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
-                          ),
+                          style: homeButtonStyle,
                           child: Text(
                             'Tasks',
                             style: TextStyle(
@@ -121,13 +110,7 @@ class _HomeState extends State<Home> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/weather');
                           },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                )),
-                            backgroundColor: MaterialStateProperty.all(Colors.pink[100]),
-                          ),
+                          style: homeButtonStyle,
                           child: Text(
                             'Weather',
                             style: TextStyle(

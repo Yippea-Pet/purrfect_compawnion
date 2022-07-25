@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:purrfect_compawnion/pages/features/pethouse.dart';
 import 'package:purrfect_compawnion/pages/features/todo_1.dart';
-import 'package:purrfect_compawnion/pages/ui/notified_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -82,19 +81,35 @@ class NotifyHelper {
 
   scheduledHungryNotification(int hour) async {
     await flutterLocalNotificationsPlugin.cancel(0);
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        "Warning!",
-        "Your pet is starving!",
-        tz.TZDateTime.now(tz.local).add(Duration(hours: hour)),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'your channel id', 'your channel name',
-                importance: Importance.max,
-                priority: Priority.high,
-                icon: 'appicon')),
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
+    if (hour <= 0) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0,
+          "Warning!",
+          "Your pet is starving!",
+          tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
+          const NotificationDetails(
+              android: AndroidNotificationDetails(
+                  'your channel id', 'your channel name',
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  icon: 'appicon')),
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidAllowWhileIdle: true);
+    } else {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0,
+          "Warning!",
+          "Your pet is starving!",
+          tz.TZDateTime.now(tz.local).add(Duration(hours: hour)),
+          const NotificationDetails(
+              android: AndroidNotificationDetails(
+                  'your channel id', 'your channel name',
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  icon: 'appicon')),
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidAllowWhileIdle: true);
+    }
   }
 
   tz.TZDateTime _convertTime(Task task) {
@@ -107,6 +122,18 @@ class NotifyHelper {
     }
 
     return test;
+  }
+
+  periodicNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        'repeating channel id', 'repeating channel name',
+        channelDescription: 'repeating description');
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
+        'repeating body', RepeatInterval.everyMinute, platformChannelSpecifics,
+        androidAllowWhileIdle: true);
   }
 
   _configureLocalTimezone() async {

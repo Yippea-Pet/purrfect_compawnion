@@ -1,3 +1,4 @@
+import 'package:country_codes/country_codes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
@@ -27,7 +28,6 @@ class _WeatherPageState extends State<WeatherPage> {
   void initState() {
     super.initState();
     getWeather();
-    loading = true;
   }
 
   @override
@@ -231,6 +231,7 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   Future getLocation() async {
+    loading = true;
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -248,13 +249,27 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     _locationData = await location.getLocation();
   }
+
   Future getWeather() async {
     try {
       await getLocation();
+      await CountryCodes.init();
+      // To get weather data
       Response response = await get(Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=${_locationData.latitude}&lon=${_locationData.longitude}&appid=${APP_ID}'));
       Map data = jsonDecode(response.body);
 
+      // To get location data (city name)
+      Response geoResponse = await get(Uri.parse('http://api.openweathermap.org/geo/1.0/reverse?lat=${_locationData.latitude}&lon=${_locationData.longitude}&limit=1&appid=${APP_ID}'));
+      List geoDataList = jsonDecode(geoResponse.body);
+      Map geoData = geoDataList[0];
+      print('https://api.openweathermap.org/data/2.5/weather?lat=${_locationData.latitude}&lon=${_locationData.longitude}&appid=${APP_ID}');
+
+      // To get country name
+      print(1);
+      CountryDetails myLocale = CountryCodes.detailsForLocale();
+      print(1);
       var weatherData = jsonDecode(jsonEncode(data['weather'][0]));
+      print(2);
       var mainData = jsonDecode(jsonEncode(data['main']));
       var sysData = jsonDecode(jsonEncode(data['sys']));
         weather = Weather(
@@ -265,10 +280,10 @@ class _WeatherPageState extends State<WeatherPage> {
           temp: mainData['temp'] - 273.15,
           temp_min: mainData['temp_min'] - 273.15,
           temp_max: mainData['temp_max'] - 273.15,
-          country: sysData['country'],
+          country: myLocale.name!,
           sunrise: DateTime.fromMillisecondsSinceEpoch(sysData['sunrise'] * 1000),
           sunset: DateTime.fromMillisecondsSinceEpoch(sysData['sunset'] * 1000),
-          city: data['name'],
+          city: geoData['name'],
         );
 
       setState(() => loading = false);

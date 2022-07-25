@@ -58,6 +58,7 @@ dependencies:
   overlay_support: ^2.0.1
   country_codes: ^2.2.0
   flutter_launcher_icons: ^0.9.3
+  geolocator: ^9.0.1
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"

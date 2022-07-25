@@ -262,7 +262,7 @@ class _WeatherPageState extends State<WeatherPage> {
       Response geoResponse = await get(Uri.parse('http://api.openweathermap.org/geo/1.0/reverse?lat=${_locationData.latitude}&lon=${_locationData.longitude}&limit=1&appid=${APP_ID}'));
       List geoDataList = jsonDecode(geoResponse.body);
       Map geoData = geoDataList[0];
-      print('https://api.openweathermap.org/data/2.5/weather?lat=${_locationData.latitude}&lon=${_locationData.longitude}&appid=${APP_ID}');
+      print('http://api.openweathermap.org/geo/1.0/reverse?lat=${_locationData.latitude}&lon=${_locationData.longitude}&limit=1&appid=${APP_ID}');
 
       // To get country name
       CountryDetails myLocale = CountryCodes.detailsForLocale();
@@ -277,7 +277,7 @@ class _WeatherPageState extends State<WeatherPage> {
           temp: mainData['temp'] - 273.15,
           temp_min: mainData['temp_min'] - 273.15,
           temp_max: mainData['temp_max'] - 273.15,
-          country: myLocale.name!,
+          country: geoData['country'],
           sunrise: DateTime.fromMillisecondsSinceEpoch(sysData['sunrise'] * 1000),
           sunset: DateTime.fromMillisecondsSinceEpoch(sysData['sunset'] * 1000),
           city: geoData['name'],

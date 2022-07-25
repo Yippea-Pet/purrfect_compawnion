@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-import 'package:purrfect_compawnion/shared/constants.dart';
 import 'package:purrfect_compawnion/shared/loading.dart';
 import '../../models/weather.dart';
 
@@ -36,11 +35,13 @@ class _WeatherPageState extends State<WeatherPage> {
     return loading
     ? Loading()
     : Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Weather',
           style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        backgroundColor: appBarColor,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -59,169 +60,171 @@ class _WeatherPageState extends State<WeatherPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 20,),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(weather!.country,
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 40,
-                              color:
-                              weather!.main == "Clouds" || weather!.main == "Atmosphere"
-                                  ? Colors.black54
-                                  : Colors.white),
+        child: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 20,),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(weather!.country,
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                fontSize: 40,
+                                color:
+                                weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                    ? Colors.black54
+                                    : Colors.white),
+                          ),
                         ),
-                      ),
-                      Text(weather!.city,
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 20,
-                              color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
-                                  ? Colors.black54
-                                  : Colors.white),
+                        Text(weather!.city,
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                fontSize: 20,
+                                color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                    ? Colors.black54
+                                    : Colors.white),
+                          ),
                         ),
-                      ),
-                      Text("${weather!.temp.roundToDouble()}°",
-                        style: GoogleFonts.heebo(
-                          textStyle: TextStyle(
-                              fontSize: 90,
-                              fontWeight: FontWeight.w200,
-                              color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
-                                  ? Colors.black54
-                                  : Colors.white),
+                        Text("${weather!.temp.roundToDouble()}°",
+                          style: GoogleFonts.heebo(
+                            textStyle: TextStyle(
+                                fontSize: 90,
+                                fontWeight: FontWeight.w200,
+                                color: weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                                    ? Colors.black54
+                                    : Colors.white),
+                          ),
                         ),
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(weather!.main,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                    ? Colors.white
-                                    : Colors.black54),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(weather!.main,
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      ? Colors.white
+                                      : Colors.black54),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 40,),
-                            Text(weather!.description,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                        ? Colors.white
-                                        : Colors.black54),
+                              SizedBox(width: 40,),
+                              Text(weather!.description,
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                          ? Colors.white
+                                          : Colors.black54),
+                                ),
                               ),
-                            ),
-                          ]
-                      ),
-                      // Text("Rainy",
-                      //   style: GoogleFonts.lato(
-                      //     textStyle: TextStyle(
-                      //         fontSize: 20,
-                      //         fontWeight: FontWeight.w300,
-                      //         color: Colors.white),
-                      //   ),
-                      // ),
-                      SizedBox(height: 10,),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text("H: ${weather!.temp_max.roundToDouble()}°",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                        ? Colors.white
-                                        : Colors.black54),
+                            ]
+                        ),
+                        // Text("Rainy",
+                        //   style: GoogleFonts.lato(
+                        //     textStyle: TextStyle(
+                        //         fontSize: 20,
+                        //         fontWeight: FontWeight.w300,
+                        //         color: Colors.white),
+                        //   ),
+                        // ),
+                        SizedBox(height: 10,),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text("H: ${weather!.temp_max.roundToDouble()}°",
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                          ? Colors.white
+                                          : Colors.black54),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 50,),
-                            Text("L: ${weather!.temp_min.roundToDouble()}°",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                        ? Colors.white
-                                        : Colors.black54),
+                              SizedBox(width: 50,),
+                              Text("L: ${weather!.temp_min.roundToDouble()}°",
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                          ? Colors.white
+                                          : Colors.black54),
+                                ),
                               ),
-                            ),
-                          ]
-                      ),
+                            ]
+                        ),
 
-                    ],
-                  ),
-                  Expanded(
-                      flex: 5,
+                      ],
+                    ),
+                    Expanded(
+                        flex: 5,
 
-                      //SOCCAT ANIMATION !!!!!!!!!!!
+                        //SOCCAT ANIMATION !!!!!!!!!!!
 
-                      //child: Image.asset('assets/rainanimation.GIF')
-                      child:
-                      weather!.main == "Clouds" || weather!.main == "Atmosphere"
-                          ? Image.asset('assets/masksoccat.GIF')
-                          : weather!.main == "Clear"
-                          ? Image.asset('assets/sunanimation2.GIF')
-                          : weather!.main == "Snow"
-                          ? Image.asset('assets/snowsoccat.GIF')
-                          : Image.asset('assets/rainanimation2.GIF')
+                        //child: Image.asset('assets/rainanimation.GIF')
+                        child:
+                        weather!.main == "Clouds" || weather!.main == "Atmosphere"
+                            ? Image.asset('assets/masksoccat.GIF')
+                            : weather!.main == "Clear"
+                            ? Image.asset('assets/sunanimation2.GIF')
+                            : weather!.main == "Snow"
+                            ? Image.asset('assets/snowsoccat.GIF')
+                            : Image.asset('assets/rainanimation2.GIF')
 
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text("sunrise time: ${DateFormat("HH:mm").format(weather!.sunrise)}",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                        ? Colors.white
-                                        : Colors.black54),
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text("sunrise time: ${DateFormat("HH:mm").format(weather!.sunrise)}",
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                          ? Colors.white
+                                          : Colors.black54),
+                                ),
                               ),
-                            ),
-                            Text("sunset time: ${DateFormat("HH:mm").format(weather!.sunset)}",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color:
-                                    weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
-                                        ? Colors.white
-                                        : Colors.black54),
+                              Text("sunset time: ${DateFormat("HH:mm").format(weather!.sunset)}",
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                          ? Colors.white
+                                          : Colors.black54),
+                                ),
                               ),
-                            ),
-                          ]
-                      )
-                  )
+                            ]
+                        )
+                    )
 
-                  // Expanded(
-                  //     flex: 1,
-                  //     child: Container())
-                ]
-            )
+                    // Expanded(
+                    //     flex: 1,
+                    //     child: Container())
+                  ]
+              )
+          ),
         ),
       ),
     );

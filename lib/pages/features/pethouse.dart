@@ -45,6 +45,7 @@ class _PetHouseState extends State<PetHouse> {
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     scheduleNotifyHungry();
+    loading = true;
   }
 
   @override
@@ -339,6 +340,6 @@ class _PetHouseState extends State<PetHouse> {
     // Remind if drop belows 20
     int hungryHour = max(hungerLevel - 20, 0);
     notifyHelper.scheduledHungryNotification(hungryHour);
-    if (mounted) setState(() {});
+    if (mounted) setState(() => loading = false);
   }
 }

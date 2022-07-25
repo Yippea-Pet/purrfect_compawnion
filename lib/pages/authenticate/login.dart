@@ -152,6 +152,7 @@ class _LoginState extends State<Login> {
 
                               ),
                             ),
+                            behavior: HitTestBehavior.translucent,
                             onTap: () => Navigator.pushNamed(context, '/resetPassword'),
                           ),
                           Row(

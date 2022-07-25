@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:purrfect_compawnion/pages/authenticate/forgot_password.dart';
 import 'package:purrfect_compawnion/pages/authenticate/login.dart';
 import 'package:purrfect_compawnion/pages/authenticate/register.dart';
 import 'package:purrfect_compawnion/pages/features/home.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/todo': (context) => ToDo(),
           '/weather': (context) => WeatherPage(),
           '/loading': (context) => Loading(),
+          '/resetPassword': (context) => ForgotPasswordPage(),
         },
       ),
     );

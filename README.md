@@ -9,7 +9,11 @@ We aim to create a mobile Android pet application with a pet (based on the masco
 
 ## Features
 ### Virtual Pet House
-|![image2](https://user-images.githubusercontent.com/97380048/182769289-bedc9cde-f67e-4e5c-96c8-aa843affba61.png)|![image11](https://user-images.githubusercontent.com/97380048/182769380-d20c746a-acd4-4a25-b4c1-ca9277dc5638.png)|![image17](https://user-images.githubusercontent.com/97380048/182769342-ea669ca0-7cc9-4a95-8841-4a9b72ce0b64.png)
+<p align="middle">
+  <img src = "https://user-images.githubusercontent.com/97380048/182769289-bedc9cde-f67e-4e5c-96c8-aa843affba61.png" width="100"/>
+  <img src = "https://user-images.githubusercontent.com/97380048/182769380-d20c746a-acd4-4a25-b4c1-ca9277dc5638.png" width="100"/>
+  <img src = "https://user-images.githubusercontent.com/97380048/182769342-ea669ca0-7cc9-4a95-8841-4a9b72ce0b64.png" width="100"/>
+</p>
 
 ### To-do List
 |![image18](https://user-images.githubusercontent.com/97380048/182769483-7da512e5-abc7-403b-a0d2-a7259ef9f9ed.png)|![image21](https://user-images.githubusercontent.com/97380048/182769486-90af4ef9-7fc4-49f3-a3fb-77fa0fc1a23a.png)|![image3](https://user-images.githubusercontent.com/97380048/182769489-31f19b32-a563-43f5-9eb4-067b7ea8f504.png)|![image8](https://user-images.githubusercontent.com/97380048/182769474-79fbcac5-3cd6-4f6d-adb9-72ea0ac20503.png)

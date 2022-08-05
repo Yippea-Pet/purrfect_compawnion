@@ -171,11 +171,6 @@ class _PetHouseState extends State<PetHouse> {
                   ),
                   Expanded(
                     flex: 9,
-                    // child: petState == 0
-                    //     ? Image.asset('assets/SoccatSleep.PNG')
-                    //     : petState == 1
-                    //         ? Image.asset('assets/SoccatNomming.GIF')
-                    //         : Image.asset('assets/playingsoccat.GIF'),
                     child: Image.asset(Soccats[petState]),
                   ),
                   Row(
@@ -200,6 +195,7 @@ class _PetHouseState extends State<PetHouse> {
                               hungerLevel += 1;
                               petState = 1;
                               _isFeedButtonDisabled = true;
+                              _isPlayButtonDisabled = true;
                               // });
                               scheduleResetEat(4900);
                               await DatabaseService(uid: user.uid).updateFoodData(
@@ -256,6 +252,7 @@ class _PetHouseState extends State<PetHouse> {
                               friendshipLevel = min(friendshipLevel + 1, 100);
                               petState = 2;
                               _isPlayButtonDisabled = true;
+                              _isFeedButtonDisabled = true;
                             });
                             scheduleResetPlay(4000);
                             await DatabaseService(uid: user.uid)
@@ -353,11 +350,13 @@ class _PetHouseState extends State<PetHouse> {
   Future<void> resetPlaying() async {
       petState = 3;
       _isPlayButtonDisabled = false;
+      _isFeedButtonDisabled = false;
       if (mounted) setState(() {});
   }
 
   Future<void> resetEating() async {
     petState = 3;
+    _isPlayButtonDisabled = false;
     _isFeedButtonDisabled = false;
     if (mounted) setState(() {});
   }

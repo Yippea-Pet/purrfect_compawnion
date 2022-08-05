@@ -330,12 +330,12 @@ class _PetHouseState extends State<PetHouse> {
       lastDeductTime = data['time'].toDate();
     });
     final difference = DateTime.now().difference(lastDeductTime).inHours;
-    if (difference >= 1) {
+    if (difference >= 2) {
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
       setState(() => lastDeductTime = lastDeductTime.add(Duration(hours: difference)));
       // final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
-      final finalHungerLevel = max(0, hungerLevel - difference);
+      final finalHungerLevel = max(0, hungerLevel - (difference / 2).floor());
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
       await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
@@ -344,7 +344,7 @@ class _PetHouseState extends State<PetHouse> {
   Timer scheduleTimeout([int hour = 1]) => Timer(Duration(hours: hour), handleTimeout);
   Future<void> handleTimeout() async {
     updateTime();
-    if (mounted) scheduleTimeout(1);
+    if (mounted) scheduleTimeout(2);
   }
 
   Timer scheduleResetEat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetEating);
@@ -364,7 +364,7 @@ class _PetHouseState extends State<PetHouse> {
 
   void scheduleNotifyHungry() {
     // Remind if drop belows 20
-    int hungryHour = max(hungerLevel - 20, 0);
+    int hungryHour = max((hungerLevel * 2) - 20, 0);
     notifyHelper.scheduledHungryNotification(hungryHour, name);
     if (mounted) setState(() => loading = false);
   }

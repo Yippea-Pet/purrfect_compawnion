@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/task.dart';
+import '../shared/constants.dart';
 
 class DatabaseService {
   final String? uid;
@@ -63,7 +64,7 @@ class DatabaseService {
 
   Future completeTask(String? id, int? difficulty) async {
     await users.doc(uid).collection("pet").doc("food").update({
-      'foodQuantity': FieldValue.increment((difficulty ?? 0) + 1),
+      'foodQuantity': FieldValue.increment((reward[difficulty!] ?? 0)),
     });
     return await users.doc(uid).collection("tasks").doc(id).update({
       "isCompleted": 1,

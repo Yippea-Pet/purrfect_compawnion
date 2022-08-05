@@ -24,33 +24,34 @@ class _userGuideState extends State<userGuide> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("${pages} of ${instructions.length}"),
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          //Image.asset("assets/SoccatSleep.PNG"),
-          imgList[pages - 1],
-          Text(instructions[pages - 1]),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              pages == 1
-                  ? SizedBox()
-                  : TextButton(
-                      onPressed: () => setState(() => pages -= 1),
-                      child: Text("BACK"),
-                    ),
-              pages == instructions.length
-                  ? TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("OK"),
-                    )
-                  : TextButton(
-                      onPressed: () => setState(() => pages += 1),
-                      child: Text("NEXT"),
-                    ),
-            ],
-          )
-        ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            imgList[pages - 1],
+            Text(instructions[pages - 1]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                pages == 1
+                    ? SizedBox()
+                    : TextButton(
+                        onPressed: () => setState(() => pages -= 1),
+                        child: Text("BACK"),
+                      ),
+                pages == instructions.length
+                    ? TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("OK"),
+                      )
+                    : TextButton(
+                        onPressed: () => setState(() => pages += 1),
+                        child: Text("NEXT"),
+                      ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

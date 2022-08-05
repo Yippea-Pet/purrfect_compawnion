@@ -84,3 +84,4 @@ const taskColor2 = Color(0xFFFFACBC);
 const taskColor1 = Color(0xFFFEC4B0);
 const taskTileFontColor = Color(0xFF4E342E); // Colors.brown[800]
 const appBarColor = Color(0xFFEF9A9A);
+List<int?> reward = [5,10,15];

@@ -5,7 +5,7 @@ Available on Android
 ## Aim
 We aim to create a mobile Android pet application with a pet (based on the mascot of NUS School of Computing(SoC), Soccat) that you can take care of and will accompany you. It can provide companionship to users by allowing users to interact with their pets, and also boost users’ productivity by rewarding them for completing tasks.
 
-[Link](https://drive.google.com/file/d/1Kuw2995rGubtP289-kl44d_2h9WtI1dA/view?usp=sharing) to download the APK for the application
+[Link](https://drive.google.com/file/d/1hpBd5IDWPHwXPMKCnIxDIRmFCyMFd-q5/view?usp=sharing) to download the APK for the application
 
 ## Features
 ### Virtual Pet House

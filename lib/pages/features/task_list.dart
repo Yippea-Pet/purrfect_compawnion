@@ -23,7 +23,6 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   List<String> taskDifficultyList = ["Easy", "Normal", "Hard"];
-  List<int?> reward = [1, 2, 3];
 
   late DateTime _selectedDate;
   var notifyHelper;
@@ -56,9 +55,10 @@ class _TaskListState extends State<TaskList> {
                   Task task = _taskFromDoc(doc);
                   var taskEnd = task.getEndTime();
 
-                  if (task.repeat == "None" ||
-                      task.repeat == "Daily" ||
-                      task.getDate() == _selectedDate ||
+                  if (task.repeat == "Daily" ||
+                      (task.getDate().year == _selectedDate.year &&
+                          task.getDate().month == _selectedDate.month &&
+                          task.getDate().day == _selectedDate.day) ||
                       taskEnd.isBefore(DateTime.now()) ||
                       (task.repeat == "Weekly" && task.getDate().weekday == _selectedDate.weekday) ||
                       (task.repeat == "Monthly" && task.getDate().day == _selectedDate.day)
@@ -107,7 +107,7 @@ class _TaskListState extends State<TaskList> {
     Get.bottomSheet(Container(
       padding: const EdgeInsets.only(top: 4),
       height: task.isCompleted == 1
-          ? MediaQuery.of(context).size.height * 0.24
+          ? MediaQuery.of(context).size.height * 0.18
           : MediaQuery.of(context).size.height * 0.32,
       color: Colors.white,
       child: Column(
@@ -133,7 +133,7 @@ class _TaskListState extends State<TaskList> {
                             builder: (BuildContext context) => AlertDialog(
                                   title: const Text("Congratulations!"),
                                   content: Text(
-                                      "You have completed a ${taskDifficultyList[task.difficulty!]} task! You have been rewarded ${reward[task.difficulty!]} food to feed your pet!"),
+                                      "Congratulations on completing a ${taskDifficultyList[task.difficulty!]} task! You have been rewarded ${reward[task.difficulty!]} food to feed your pet!"),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () => Navigator.pop(context, 'OK'),
@@ -163,7 +163,6 @@ class _TaskListState extends State<TaskList> {
                   },
               color: Colors.red,
               context: context),
-          Spacer(),
           _buttonSheetButton(
               label: "Cancel",
               onTap: () => Get.back(),

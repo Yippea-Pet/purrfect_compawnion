@@ -26,7 +26,7 @@ class _PetHouseState extends State<PetHouse> {
   int hungerLevel = 0;
   int friendshipLevel = 0;
   int foodQuantity = 0;
-  String? name;
+  String name = "Soccat!";
   late bool doNotShowPetMaxLevelDialog;
   bool isChecked = false;
   bool loading = false;
@@ -34,7 +34,9 @@ class _PetHouseState extends State<PetHouse> {
   late DateTime lastDeductTime;
 
   bool _isFeedButtonDisabled = false;
+  bool _isPlayButtonDisabled = false;
   int petState = 0; // 0(default):sleeping, 1: eating, 2: playing
+  List<String> Soccats = ['assets/SoccatSleep.PNG', 'assets/SoccatNomming.GIF', 'assets/playingsoccat.GIF', 'assets/MovingSoccat.GIF'];
 
   var notifyHelper;
 
@@ -84,7 +86,7 @@ class _PetHouseState extends State<PetHouse> {
         : Scaffold(
             appBar: AppBar(
               title: Center(
-                child: Text(name ?? 'Soccat!'),
+                child: Text(name),
               ),
               backgroundColor: appBarColor,
               actions: <Widget>[
@@ -169,11 +171,7 @@ class _PetHouseState extends State<PetHouse> {
                   ),
                   Expanded(
                     flex: 9,
-                    child: petState == 0
-                        ? Image.asset('assets/SoccatSleep.PNG')
-                        : petState == 1
-                            ? Image.asset('assets/SoccatNomming.GIF')
-                            : Image.asset('assets/playingsoccat.GIF'),
+                    child: Image.asset(Soccats[petState]),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -187,16 +185,23 @@ class _PetHouseState extends State<PetHouse> {
                               SnackBar(content: Text("I need some time to chew! ><")),
                             );
                           } else if (foodQuantity > 0) {
-                            // setState(() {
+                            if (hungerLevel >= 100) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("I'm still full! Feed me later~")),
+                              );
+                            } else {
+                              // setState(() {
                               foodQuantity -= 1;
                               hungerLevel += 1;
                               petState = 1;
                               _isFeedButtonDisabled = true;
-                            // });
-                            scheduleResetSoccat(4900);
-                            await DatabaseService(uid: user.uid).updateFoodData(
-                                friendshipLevel, hungerLevel, foodQuantity);
+                              _isPlayButtonDisabled = true;
+                              // });
+                              scheduleResetEat(4900);
+                              await DatabaseService(uid: user.uid).updateFoodData(
+                                  friendshipLevel, hungerLevel, foodQuantity);
                               if (mounted) setState(() {});
+                            }
                           } else {
                             return showDialog(
                                 context: context,
@@ -236,44 +241,55 @@ class _PetHouseState extends State<PetHouse> {
                       SizedBox(width: 30),
                       ElevatedButton(
                         onPressed: () async {
-                          setState(() {
-                            friendshipLevel = min(friendshipLevel + 1, 100);
-                            petState = 2;
-                          });
-                          scheduleResetSoccat(4000);
-                          await DatabaseService(uid: user.uid)
-                              .updatePetData(friendshipLevel, hungerLevel);
-                          if (friendshipLevel >= 100 && !doNotShowPetMaxLevelDialog) {
-                            return showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    StatefulBuilder(
-                                        builder: (context, setState) {
-                                      return AlertDialog(
-                                        title: const Text("Congratulations!"),
-                                        content: const Text(
-                                            "You have reached the maximum friendship level with Soccat!"),
-                                        actions: <Widget>[
-                                          Text("Do not show this again"),
-                                          Checkbox(
-                                              checkColor: Colors.white,
-                                              fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
-                                              value: doNotShowPetMaxLevelDialog,
-                                              onChanged: (bool? value) async {
-                                                setState(() {
-                                                  doNotShowPetMaxLevelDialog = value ?? false;
-                                                });
-                                                await DatabaseService(uid: user.uid).doNotShowFriendshipLevelDialog(doNotShowPetMaxLevelDialog);
-                                              }),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'OK'),
-                                            child: const Text("OK"),
-                                          ),
-                                        ],
-                                      );
-                                    }));
+                          if (_isPlayButtonDisabled) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Let's play again later! owo")),
+                            );
+                          } else {
+                            setState(() {
+                              friendshipLevel = min(friendshipLevel + 1, 100);
+                              petState = 2;
+                              _isPlayButtonDisabled = true;
+                              _isFeedButtonDisabled = true;
+                            });
+                            scheduleResetPlay(4000);
+                            await DatabaseService(uid: user.uid)
+                                .updatePetData(friendshipLevel, hungerLevel);
+                            if (friendshipLevel >= 100 && !doNotShowPetMaxLevelDialog) {
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return AlertDialog(
+                                              title: const Text("Congratulations!"),
+                                              content: const Text(
+                                                  "You have reached the maximum friendship level with Soccat!"),
+                                              actions: <Widget>[
+                                                Text("Do not show this again"),
+                                                Checkbox(
+                                                    checkColor: Colors.white,
+                                                    fillColor: MaterialStateProperty.resolveWith(checkBoxMaterialState),
+                                                    value: doNotShowPetMaxLevelDialog,
+                                                    onChanged: (bool? value) async {
+                                                      setState(() {
+                                                        doNotShowPetMaxLevelDialog = value ?? false;
+                                                      });
+                                                      await DatabaseService(uid: user.uid).doNotShowFriendshipLevelDialog(doNotShowPetMaxLevelDialog);
+                                                    }),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(context, 'OK'),
+                                                  child: const Text("OK"),
+                                                ),
+                                              ],
+                                            );
+                                          }));
+                            }
                           }
+
                         },
                         child: SizedBox(
                             height: 30,
@@ -311,12 +327,12 @@ class _PetHouseState extends State<PetHouse> {
       lastDeductTime = data['time'].toDate();
     });
     final difference = DateTime.now().difference(lastDeductTime).inHours;
-    if (difference >= 1) {
+    if (difference >= 2) {
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(hours: difference)));
       // await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime.add(Duration(minutes: difference)));
       setState(() => lastDeductTime = lastDeductTime.add(Duration(hours: difference)));
       // final finalHungerLevel = max(0, hungerLevel - (difference / 5).floor());
-      final finalHungerLevel = max(0, hungerLevel - difference);
+      final finalHungerLevel = max(0, hungerLevel - (difference / 2).floor());
       await DatabaseService(uid: user.uid).updateDeductHungerTime(lastDeductTime);
       await DatabaseService(uid: user.uid).updatePetData(friendshipLevel, finalHungerLevel);
     }
@@ -325,21 +341,30 @@ class _PetHouseState extends State<PetHouse> {
   Timer scheduleTimeout([int hour = 1]) => Timer(Duration(hours: hour), handleTimeout);
   Future<void> handleTimeout() async {
     updateTime();
-    if (mounted) scheduleTimeout(1);
+    if (mounted) scheduleTimeout(2);
   }
 
-  Timer scheduleResetSoccat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetSoccat);
+  Timer scheduleResetEat([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetEating);
+  Timer scheduleResetPlay([int milliseconds = 5100]) => Timer(Duration(milliseconds: milliseconds), resetPlaying);
 
-  Future<void> resetSoccat() async {
-      petState = 0;
+  Future<void> resetPlaying() async {
+      petState = 3;
+      _isPlayButtonDisabled = false;
       _isFeedButtonDisabled = false;
       if (mounted) setState(() {});
   }
 
+  Future<void> resetEating() async {
+    petState = 3;
+    _isPlayButtonDisabled = false;
+    _isFeedButtonDisabled = false;
+    if (mounted) setState(() {});
+  }
+
   void scheduleNotifyHungry() {
     // Remind if drop belows 20
-    int hungryHour = max(hungerLevel - 20, 0);
-    notifyHelper.scheduledHungryNotification(hungryHour);
+    int hungryHour = max((hungerLevel * 2) - 20, 0);
+    notifyHelper.scheduledHungryNotification(hungryHour, name);
     if (mounted) setState(() => loading = false);
   }
 }

@@ -79,13 +79,13 @@ class NotifyHelper {
     }
   }
 
-  scheduledHungryNotification(int hour) async {
+  scheduledHungryNotification(int hour, String name) async {
     await flutterLocalNotificationsPlugin.cancel(0);
     if (hour <= 0) {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           0,
           "Warning!",
-          "Your pet is starving!",
+          name + " is starving!",
           tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)),
           const NotificationDetails(
               android: AndroidNotificationDetails(
@@ -94,12 +94,14 @@ class NotifyHelper {
                   priority: Priority.high,
                   icon: 'appicon')),
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-          androidAllowWhileIdle: true);
+          androidAllowWhileIdle: true,
+          payload: "Feed your pet!",
+      );
     } else {
       await flutterLocalNotificationsPlugin.zonedSchedule(
           0,
           "Warning!",
-          "Your pet is starving!",
+          name + " is starving!",
           tz.TZDateTime.now(tz.local).add(Duration(hours: hour)),
           const NotificationDetails(
               android: AndroidNotificationDetails(
@@ -108,7 +110,9 @@ class NotifyHelper {
                   priority: Priority.high,
                   icon: 'appicon')),
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-          androidAllowWhileIdle: true);
+          androidAllowWhileIdle: true,
+          payload: "Feed your pet!",
+      );
     }
   }
 

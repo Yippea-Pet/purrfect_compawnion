@@ -62,67 +62,71 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
               flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: 230,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/pethouse');
-                          },
-                          style: homeButtonStyle,
-                          child: Text(
-                            'Pet House',
-                            style: TextStyle(
-                              // backgroundColor: Colors.pink[100],
-                              color: Colors.pink[400],
-                              fontSize: 40.0,
-                            ),
-                          )
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/pethouse');
+                            },
+                            style: homeButtonStyle,
+                            child: Text(
+                              'Pet House',
+                              style: TextStyle(
+                                // backgroundColor: Colors.pink[100],
+                                color: Colors.pink[400],
+                                fontSize: MediaQuery.of(context).size.width * 0.1,
+                              ),
+                            )
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 230,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/todo');
-                          },
-                          style: homeButtonStyle,
-                          child: Text(
-                            'Tasks',
-                            style: TextStyle(
-                              // backgroundColor: Colors.pink[100],
-                              color: Colors.pink[400],
-                              fontSize: 40.0,
-                            ),
-                          )
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.005,),
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/todo');
+                            },
+                            style: homeButtonStyle,
+                            child: Text(
+                              'Tasks',
+                              style: TextStyle(
+                                // backgroundColor: Colors.pink[100],
+                                color: Colors.pink[400],
+                                fontSize: MediaQuery.of(context).size.width * 0.1,
+                              ),
+                            )
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 230,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/weather');
-                          },
-                          style: homeButtonStyle,
-                          child: Text(
-                            'Weather',
-                            style: TextStyle(
-                              // backgroundColor: Colors.pink[100],
-                              color: Colors.pink[400],
-                              fontSize: 40.0,
-                            ),
-                          )
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/weather');
+                            },
+                            style: homeButtonStyle,
+                            child: Text(
+                              'Weather',
+                              style: TextStyle(
+                                // backgroundColor: Colors.pink[100],
+                                color: Colors.pink[400],
+                                fontSize: MediaQuery.of(context).size.width * 0.1,
+                              ),
+                            )
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

@@ -111,7 +111,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w300,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                       ? Colors.white
                                       : Colors.black54),
                                 ),
@@ -123,7 +123,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w300,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                           ? Colors.white
                                           : Colors.black54),
                                 ),
@@ -149,7 +149,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                           ? Colors.white
                                           : Colors.black54),
                                 ),
@@ -161,7 +161,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                           ? Colors.white
                                           : Colors.black54),
                                 ),
@@ -184,7 +184,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             ? Image.asset('assets/sunanimation2.GIF')
                             : weather!.main == "Snow"
                             ? Image.asset('assets/snowsoccat.GIF')
-                            : Image.asset('assets/rainanimation2.GIF')
+                            : Image.asset('assets/rainanimation.GIF')
 
                     ),
                     Expanded(
@@ -199,7 +199,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                           ? Colors.white
                                           : Colors.black54),
                                 ),
@@ -210,7 +210,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color:
-                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm"
+                                      weather!.main == "Rain" ||  weather!.main == "Drizzle" ||  weather!.main == "Thunderstorm" || weather!.main == "Snow"
                                           ? Colors.white
                                           : Colors.black54),
                                 ),
